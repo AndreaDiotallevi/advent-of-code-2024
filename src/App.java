@@ -7,7 +7,9 @@
 // import day4.Day4;
 // import day4.Day4Part2;
 // import day4.day5.Day5;
-import day4.day5.Day5Part2;
+// import day5.Day5Part2;
+
+import day5.Day5Part2;
 
 public class App {
     public static void main(String[] args) throws Exception {

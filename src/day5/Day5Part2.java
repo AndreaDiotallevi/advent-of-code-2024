@@ -1,8 +1,9 @@
-package day4.day5;
+package day5;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
-public class Day5 {
+public class Day5Part2 {
     public Map<Integer,Set<Integer>> map = new HashMap<>();
 
     public int processFile() {
@@ -37,8 +38,6 @@ public class Day5 {
                 }
             }
 
-            System.out.println(map);
-
             while (scanner.hasNextLine()) {
                 boolean valid = true;
                 String line = scanner.nextLine();
@@ -60,9 +59,28 @@ public class Day5 {
                     }
                 }
 
-                if (valid) {
-                    System.out.println(collection);
-                    sum += collection.get(collection.size() / 2);
+                if (!valid) {
+                    int loopIndex = 0;
+
+                    while (loopIndex < 5) {
+                        for (Map.Entry<Integer,Set<Integer>> mapEntry : map.entrySet()) {
+                            int currentLeft = mapEntry.getKey();
+                            
+                            for (int setEntry : mapEntry.getValue()) {
+                                if (collection.contains(currentLeft) && collection.contains(setEntry)) {
+                                    int leftIndex = collection.indexOf(currentLeft);
+                                    int rightIndex = collection.indexOf(setEntry);
+                                    
+                                    if (leftIndex > rightIndex) {
+                                        Collections.swap(collection, leftIndex, rightIndex);
+                                    }  
+                                }
+                            }
+                        }
+                        loopIndex++;
+                    }
+
+                    sum += collection.get(collection.size()/2);
                 }
             }
 
