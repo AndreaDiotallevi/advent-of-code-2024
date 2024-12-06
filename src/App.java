@@ -8,9 +8,9 @@
 // import day4.Day4Part2;
 // import day4.day5.Day5;
 // import day5.Day5Part2;
-
 // import day5.Day5Part2;
-import day6.Day6Part1;
+// import day6.Day6Part1;
+import day6.Day6Part2;
 
 public class App {
     public static void main(String[] args) throws Exception {
@@ -44,7 +44,10 @@ public class App {
         // int result = new Day5Part2().processFile();
         // System.out.println(result);
 
-        int result = new Day6Part1().processFile();
+        // int result = new Day6Part1().processFile();
+        // System.out.println(result);
+
+        int result = new Day6Part2().processFile();
         System.out.println(result);
     }
 }
