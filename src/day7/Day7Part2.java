@@ -27,30 +27,36 @@ public class Day7Part2 {
             scanner.close();
 
             long sum = 0;
+            int radix = 3;
 
             for (int i=0; i<resultList.size(); i++) {
                 Long result = resultList.get(i);
-                // System.out.println("result");
-                // System.out.println(result);
                 List<Long> factors = factorsList.get(i);
-                // System.out.println("factors");
-                // System.out.println(factors);
-                List<String> operatorsCombinations = generateOperatorsCombinations(factors.size());
 
-                for (String operatorCombination : operatorsCombinations) {
-                    // System.out.println("current combination of operators");
-                    // System.out.println(operatorCombination);
-                    Long equationResult = calculate1(factors, operatorCombination);
-                    // System.out.println(result);
-                    // System.out.println((long)equationResult == (long)result);
+                Long binarySize = (long)factors.size()-1;
 
-                    if ((long)equationResult == (long)result) {
-                        // System.out.println("result matched");
-                        // System.out.println(result);
-                        sum+= result;
-                        break;
+                for (int j=0; j<Math.pow(radix, binarySize); j++) {
+                    String base3 = Long.toString(j, radix);
+                    String padded = String.format("%" + binarySize + "s", base3).replace(' ', '0');
+
+                    long equationResult = factors.get(0);
+
+                    for (int k=1; k<factors.size(); k++) {
+                        long currentFactor = factors.get(k);
+                        char operator = padded.charAt(k-1);
+                        if (operator == '0') equationResult += currentFactor;
+                        if (operator == '1') equationResult *= currentFactor;
+                        if (operator == '2') {
+                            String str = String.valueOf(equationResult) + String.valueOf(currentFactor);
+                            Long num = Long.parseLong(str);
+                            equationResult = num;
+                        }
                     }
 
+                    if (equationResult == result) {
+                        sum += result;
+                        break;
+                    }
                 }
             }
 
@@ -58,36 +64,5 @@ public class Day7Part2 {
         } catch (FileNotFoundException e) {
             return -1;
         }
-    }
-
-    private List<String> generateOperatorsCombinations(int factorsSize) {
-        Integer n = factorsSize - 1;
-        List<String> operatorGroups = new ArrayList<>();
-
-        for (int i=0; i<Math.pow(2, n); i++) {
-            String base3 = Long.toString(i, 2);
-            String padded = String.format("%" + n + "s", base3).replace(' ', '0');
-            operatorGroups.add(padded);
-        }
-        // System.out.println("operator groups");
-        // System.out.println(operatorGroups);
-        return operatorGroups;
-    }
-
-    private Long calculate1(List<Long> factors, String operatorsCombination) {
-        Long equationResult = factors.get(0);
-
-        for (int i=1; i<factors.size(); i++) {
-            Long currentFactor = factors.get(i);
-            char operator = operatorsCombination.charAt(i-1);
-            // System.out.println("current operator");
-            // System.out.println(operator);
-            if (operator == '0') equationResult += currentFactor;
-            if (operator == '1') equationResult *= currentFactor;
-        }
-
-        // System.out.println("equation result");
-        // System.out.println(equationResult);
-        return equationResult;
     }
 }

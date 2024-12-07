@@ -12,6 +12,9 @@
 // import day6.Day6Part1;
 // import day6.Day6Part2;
 // import day7.Day7Part1;
+import java.util.ArrayList;
+import java.util.List;
+
 import day7.Day7Part2;
 
 public class App {
@@ -57,5 +60,18 @@ public class App {
 
         long result = new Day7Part2().processFile();
         System.out.println(result);
+
+        // List<String> operators = List.of("0","1","2","0","1","0","2", );
+        // List<Long> numbers = List.of(4L, 5L, 6L, 67L, 5L, 6L, 65L, 77L, 9L);
+        
+        // // Split the list at indices 3 and 7
+        // List<List<Long>> result = new ArrayList<>();
+        
+        // result.add(new ArrayList<>(numbers.subList(0, 3)));    // First sublist (index 0 to 2)
+        // result.add(new ArrayList<>(numbers.subList(3, 7)));    // Second sublist (index 3 to 6)
+        // result.add(new ArrayList<>(numbers.subList(7, numbers.size()))); // Last sublist (index 7 to end)
+        
+        // // Print the result
+        // System.out.println(result);
     }
 }
