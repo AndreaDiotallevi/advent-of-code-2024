@@ -32,22 +32,16 @@ public class Day7Part1 {
                 Long result = resultList.get(i);
                 List<Long> factors = factorsList.get(i);
 
-                System.out.println(result);
-                System.out.println(factors);
-
                 Long binarySize = (long)factors.size()-1;
 
                 for (int j=0; j<Math.pow(2, binarySize); j++) {
                     String paddedBinary = String.format("%" + binarySize + "s", Long.toBinaryString(j)).replace(' ', '0');
                     String operatorsString = paddedBinary.replace('0', '+').replace('1', '*');
-                    // System.out.println(operatorsString);
 
                     long equationResult = factors.get(0);
-                    // System.out.println(equationResult);
 
                     for (int k=1; k<factors.size(); k++) {
                         long currentFactor = factors.get(k);
-                        // System.out.println(currentFactor);
                         char operator = operatorsString.charAt(k-1);
                         if (operator == '+') equationResult += currentFactor;
                         if (operator == '*') equationResult *= currentFactor;
