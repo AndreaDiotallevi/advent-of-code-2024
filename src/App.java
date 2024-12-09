@@ -16,7 +16,8 @@
 // import java.util.List;
 // import day7.Day7Part2;
 // import day8.Day8Part1;
-import day8.Day8Part2;
+// import day8.Day8Part2;
+import day9.Day9Part1;
 
 public class App {
     public static void main(String[] args) throws Exception {
@@ -65,7 +66,10 @@ public class App {
         // long result = new Day8Part1().processFile();
         // System.out.println(result);
 
-        long result = new Day8Part2().processFile();
+        // long result = new Day8Part2().processFile();
+        // System.out.println(result);
+
+        long result = new Day9Part1().processFile();
         System.out.println(result);
     }
 }
