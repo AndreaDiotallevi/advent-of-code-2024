@@ -10,15 +10,15 @@ import java.util.Scanner;
 public class Day9Part1 {
     public List<Integer> memory = new ArrayList<>();
 
-    public int processFile() {
+    public long processFile() {
         try {
-            File file = new File("resources/day9test.txt");
+            File file = new File("resources/day9.txt");
             Scanner scanner = new Scanner(file);
             String line = scanner.nextLine();
-            System.out.println(line);
+            // System.out.println(line);
             scanner.close();
 
-            int digit = 0;
+            int id = 0;
 
             for (int i=0; i<line.length(); i++) {
                 boolean isBlockFile = (i & 1) == 0;
@@ -26,18 +26,18 @@ public class Day9Part1 {
                 // System.out.println(isBlockFile);
                 char currentChar = line.charAt(i);
 
-                int times = currentChar - '0';
-                for (int j=0; j<times; j++) {
+                long times = currentChar - '0';
+                for (long j=0; j<times; j++) {
                     if (isBlockFile) {
-                        memory.add(digit);
+                        memory.add(id);
                     } else {
                         memory.add(-1);
                     }
                 }
-                if (isBlockFile) digit++;
+                if (isBlockFile) id++;
             }
 
-            System.out.println(memory);
+            // System.out.println(memory);
 
             int i=0;
             int j=memory.size()-1;
@@ -71,9 +71,9 @@ public class Day9Part1 {
             // System.out.println(memory);
             // System.out.println(j);
 
-            int sum=0;
+            long sum=0;
             for (int k=0; k<j+1; k++) {
-                int num = memory.get(k);
+                long num = memory.get(k);
                 if (num != -1) {
                     sum += num * k;
                 }
@@ -85,3 +85,5 @@ public class Day9Part1 {
         }
     }
 }
+
+// 1977774023
