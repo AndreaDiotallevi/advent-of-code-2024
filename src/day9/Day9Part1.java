@@ -15,21 +15,21 @@ public class Day9Part1 {
             File file = new File("resources/day9.txt");
             Scanner scanner = new Scanner(file);
             String line = scanner.nextLine();
-            // System.out.println(line);
             scanner.close();
 
             int id = 0;
 
             for (int i=0; i<line.length(); i++) {
                 boolean isBlockFile = (i & 1) == 0;
-                // System.out.println(i);
-                // System.out.println(isBlockFile);
                 char currentChar = line.charAt(i);
 
                 long times = currentChar - '0';
                 for (long j=0; j<times; j++) {
                     if (isBlockFile) {
                         memory.add(id);
+                        // for (char c : String.valueOf(id).toCharArray()) {
+                        //     memory.add(c - '0');
+                        // }
                     } else {
                         memory.add(-1);
                     }
@@ -63,17 +63,18 @@ public class Day9Part1 {
                     }
                 }
 
+                if (i>=j) break;
+
                 Collections.swap(memory, i, j);
                 i++;
                 j--;
             }
 
             // System.out.println(memory);
-            // System.out.println(j);
 
             long sum=0;
-            for (int k=0; k<j+1; k++) {
-                long num = memory.get(k);
+            for (int k=0; k<memory.size(); k++) {
+                int num = memory.get(k);
                 if (num != -1) {
                     sum += num * k;
                 }
@@ -85,5 +86,3 @@ public class Day9Part1 {
         }
     }
 }
-
-// 1977774023
