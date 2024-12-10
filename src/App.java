@@ -18,7 +18,8 @@
 // import day8.Day8Part1;
 // import day8.Day8Part2;
 // import day9.Day9Part1;
-import day9.Day9Part2;
+// import day9.Day9Part2;
+import day10.Day10Part1;
 
 public class App {
     public static void main(String[] args) throws Exception {
@@ -73,7 +74,10 @@ public class App {
         // long result = new Day9Part1().processFile();
         // System.out.println(result);
 
-        long result = new Day9Part2().processFile();
+        // long result = new Day9Part2().processFile();
+        // System.out.println(result);
+
+        int result = new Day10Part1().processFile();
         System.out.println(result);
     }
 }
