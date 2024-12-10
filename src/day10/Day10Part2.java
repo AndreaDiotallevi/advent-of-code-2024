@@ -8,10 +8,11 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
-public class Day10Part1 {
+public class Day10Part2 {
     public List<List<Integer>> matrix = new ArrayList<>();
     public List<List<Node>> nodeMatrix = new ArrayList<>();
     public Set<String> trailheads = new HashSet<>();
+    int sum = 0;
 
     public class Node {
         int value;
@@ -116,7 +117,7 @@ public class Day10Part1 {
                 }
             }
 
-            return trailheads.size();
+            return sum;
         } catch (FileNotFoundException e) {
             return -1;
         }
@@ -127,7 +128,7 @@ public class Day10Part1 {
 
         if (node.edges.size()==0) {
             if (node.value==9) {
-                trailheads.add(originalNode.x + "-" + originalNode.y + "-" + x + "-" + y);
+                sum++;
             }
             return;
         }
