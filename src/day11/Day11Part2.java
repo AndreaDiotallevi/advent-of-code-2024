@@ -10,12 +10,12 @@ import java.util.Scanner;
 
 public class Day11Part2 {
     public List<Long> myList = new ArrayList<>();
-    public int times = 25;
-    public Map<Integer,Long> mySet = new HashMap<>();
+    public int times = 75;
+    public Map<String,Long> myMap = new HashMap<>();
 
     public long processFile() {
         try {
-            File file = new File("resources/day11test.txt");
+            File file = new File("resources/day11.txt");
             Scanner scanner = new Scanner(file);
             String line = scanner.nextLine();
             String[] stringArray = line.split(" ");
@@ -23,12 +23,10 @@ public class Day11Part2 {
                 myList.add(Long.parseLong(s));
             }
             scanner.close();
-
             Long sum = (long)0;
             for (int i=0; i<myList.size(); i++) {
-                System.out.println(i);
                 long partial = recursiveFind(myList.get(i), 0,0);
-                System.out.println(partial);
+                myMap.put(myList.get(i) + "--" + 0, partial);
                 sum+= partial;
             }
             return sum; 
@@ -37,72 +35,33 @@ public class Day11Part2 {
         }
     }
 
-    // 1 x 1 = 1
-    // 1 x 2 = 2
-    // 1 x 3 = 4
-    // 1 x 4 = 4
-    // 1 x 5 = 7
-    // 1 x 6 = 14
-    // 1 x 7 = 16
-    // 1 x 8 = 20
-    // 1 x 9 = 39
-    // 1 x 10 = 62
-    // 1 x 20 = 3572
-    // 1 x 30 = 234511
-    // 1 x 40 = 15458147
-    // 1 x 45 = 125001266
-    // 1 x 46 = 189148778
-    // 1 x 50 = 1010392024
-    // 1 x 55 = 8161193535
-
     private long recursiveFind(long num, int depth, long sum) {
-        // System.out.printf("depth=%d, num=%d %n",depth,num);
-        
-        // if (num==1 && times-depth==3) {
-        //     sum+=4;
-        //     return;
-        // }
-        // if (num==1 && times-depth==10) {
-        //     sum+=62;
-        //     return;
-        // }
-        // if (num==1 && times-depth==20) {
-        //     sum+=3572;
-        //     return;
-        // }
-        // if (num==1 && times-depth==30) {
-        //     sum+=234511;
-        //     return;
-        // }
-        // if (num==1 && times-depth==40) {
-        //     sum+=15458147;
-        //     return;
-        // }
-        // if (num==1 && times-depth==46) {
-        //     sum+=189148778;
-        //     return;
-        // }
-        // if (num==1 && times-depth==50) {
-        //     sum+=1010392024;
-        //     return;
-        // }
+        if (myMap.containsKey(num+"--"+depth)) {
+            return myMap.get(num+"--"+depth);
+        }
 
         if (depth==times) {
             sum++;
-            // System.out.println(sum);
             return 1;
         }
 
         if (num==0) {
-            return recursiveFind(1, depth+1, sum);
+            long result = recursiveFind(1, depth+1, sum);
+            myMap.put(1 + "--" + (depth+1), result);
+            return result;
         } else {
             String str = String.valueOf(num);
             int size = str.length();
             if (size%2==0) {
-                return (recursiveFind(Long.parseLong(str.substring(0, size/2)), depth+1,sum) +
-                        recursiveFind(Long.parseLong(str.substring(size/2)), depth+1,sum) );
+                long result1 = recursiveFind(Long.parseLong(str.substring(0, size/2)), depth+1,sum);
+                myMap.put(Long.parseLong(str.substring(0, size/2)) + "--" + (depth+1), result1);
+                long result2 = recursiveFind(Long.parseLong(str.substring(size/2)), depth+1,sum);
+                myMap.put(Long.parseLong(str.substring(size/2)) + "--" + (depth+1), result2);
+                return result1 + result2;
             } else {
-                return recursiveFind(num*2024, depth+1,sum);
+                long result = recursiveFind(num*2024, depth+1,sum);
+                myMap.put(num*2024 + "--" + (depth+1), result);
+                return result;
             }
         }
     }
