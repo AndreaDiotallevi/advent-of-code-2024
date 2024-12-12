@@ -26,14 +26,18 @@ public class Day6Part2 {
 
                 List<Character> row = new ArrayList<>();
 
-                for (int i=0; i<charArray.length; i++) {
+                for (int i = 0; i < charArray.length; i++) {
                     char c = charArray[i];
                     row.add(c);
 
-                    if (c == '^') startingDirection = "u";
-                    if (c == '>') startingDirection = "r";
-                    if (c == 'v') startingDirection = "d";
-                    if (c == '<') startingDirection = "l";
+                    if (c == '^')
+                        startingDirection = "u";
+                    if (c == '>')
+                        startingDirection = "r";
+                    if (c == 'v')
+                        startingDirection = "d";
+                    if (c == '<')
+                        startingDirection = "l";
 
                     if (c == '^' || c == '>' || c == 'v' || c == '<') {
                         Point newPoint = new Point();
@@ -49,14 +53,19 @@ public class Day6Part2 {
 
             int sum = 0;
 
-            for (int x=0; x<matrix.size(); x++) {
-                for (int y=0; y<matrix.size(); y++) {
+            for (int x = 0; x < matrix.size(); x++) {
+                for (int y = 0; y < matrix.size(); y++) {
                     Character currentChar = matrix.get(x).get(y);
-                    if (currentChar == '#') continue;
-                    if (currentChar == '^') continue; 
-                    if (currentChar == '>') continue; 
-                    if (currentChar == 'v') continue; 
-                    if (currentChar == '<') continue; 
+                    if (currentChar == '#')
+                        continue;
+                    if (currentChar == '^')
+                        continue;
+                    if (currentChar == '>')
+                        continue;
+                    if (currentChar == 'v')
+                        continue;
+                    if (currentChar == '<')
+                        continue;
 
                     matrix.get(x).set(y, '#');
 
@@ -68,20 +77,25 @@ public class Day6Part2 {
                     Point currentPoint = new Point();
                     currentPoint.setLocation(startingPoint);
                     String currentDirection = startingDirection;
-                    
+
                     boolean finished = false;
 
                     while (!finished) {
                         Point point = new Point();
-                        
-                        if (currentDirection=="u") point.setLocation(currentPoint.x-1, currentPoint.y);
-                        if (currentDirection=="r") point.setLocation(currentPoint.x, currentPoint.y+1);
-                        if (currentDirection=="d") point.setLocation(currentPoint.x+1, currentPoint.y);
-                        if (currentDirection=="l") point.setLocation(currentPoint.x, currentPoint.y-1);
 
-                        if (point.x<0 || point.y<0 || point.x==matrix.size()|| point.y==matrix.size()) break;
+                        if (currentDirection == "u")
+                            point.setLocation(currentPoint.x - 1, currentPoint.y);
+                        if (currentDirection == "r")
+                            point.setLocation(currentPoint.x, currentPoint.y + 1);
+                        if (currentDirection == "d")
+                            point.setLocation(currentPoint.x + 1, currentPoint.y);
+                        if (currentDirection == "l")
+                            point.setLocation(currentPoint.x, currentPoint.y - 1);
 
-                        if (matrix.get(point.x).get(point.y)=='#') {
+                        if (point.x < 0 || point.y < 0 || point.x == matrix.size() || point.y == matrix.size())
+                            break;
+
+                        if (matrix.get(point.x).get(point.y) == '#') {
                             int currentDirectionIndex = directions.indexOf(currentDirection);
                             currentDirection = directions.get((currentDirectionIndex + 1) % 4);
                         } else {
@@ -89,18 +103,19 @@ public class Day6Part2 {
                                 int index = travelledPoints.indexOf(point);
                                 String thisDirection = travelledDirections.get(index);
                                 if (thisDirection == currentDirection) {
-                                    sum+= 1;
+                                    sum += 1;
                                     System.out.println(sum);
                                     break;
                                 }
                             }
-                            
+
                             travelledPoints.add(point);
                             travelledDirections.add(currentDirection);
 
                             currentPoint.setLocation(point);
 
-                            if (point.x==matrix.size()-1 || point.y==matrix.size()-1) finished = true;
+                            if (point.x == matrix.size() - 1 || point.y == matrix.size() - 1)
+                                finished = true;
                         }
                     }
 

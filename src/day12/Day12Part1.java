@@ -16,12 +16,11 @@ public class Day12Part1 {
     public List<Set<String>> listOfSets = new ArrayList<>();
     public Set<String> seen = new HashSet<>();
     List<int[]> directions = new ArrayList<>(Arrays.asList(
-        new int[]{0, 1},
-        new int[]{1, 0},
-        new int[]{0, -1},
-        new int[]{-1, 0}
-    ));
-    
+            new int[] { 0, 1 },
+            new int[] { 1, 0 },
+            new int[] { 0, -1 },
+            new int[] { -1, 0 }));
+
     public long processFile() {
         try {
             File file = new File("resources/day12.txt");
@@ -38,27 +37,28 @@ public class Day12Part1 {
             scanner.close();
             size = matrix.size();
 
-            for (int x=0; x<size; x++) {
-                for (int y=0; y<size; y++) {
-                    boolean completed = seen.contains(x+"-"+y);
-                    if (completed) continue;
+            for (int x = 0; x < size; x++) {
+                for (int y = 0; y < size; y++) {
+                    boolean completed = seen.contains(x + "-" + y);
+                    if (completed)
+                        continue;
                     Set<String> mySet = new HashSet<>();
-                    mySet.add(x+"-"+y);
+                    mySet.add(x + "-" + y);
                     listOfSets.add(mySet);
                     recursiveFind(x, y, mySet);
                 }
             }
 
-            long sum=0;
+            long sum = 0;
             for (Set<String> mySet : listOfSets) {
                 long perimeter = 0;
                 for (String item : mySet) {
                     String[] keySplit = item.split("-");
                     int x = Integer.parseInt(keySplit[0]);
                     int y = Integer.parseInt(keySplit[1]);
-                    perimeter+= getPerimeter(x, y);
+                    perimeter += getPerimeter(x, y);
                 }
-                sum+= mySet.size()*perimeter;
+                sum += mySet.size() * perimeter;
             }
             return sum;
         } catch (FileNotFoundException e) {
@@ -67,21 +67,22 @@ public class Day12Part1 {
     }
 
     private void recursiveFind(int x, int y, Set<String> mySet) {
-        boolean completed = seen.contains(x+"-"+y);
+        boolean completed = seen.contains(x + "-" + y);
         if (completed) {
             return;
         }
+
         char currentChar = matrix.get(x).get(y);
-        seen.add(x+"-"+y);
+        seen.add(x + "-" + y);
 
-        for (int[] direction: directions) {
-            int newX = (int)x+direction[0];
-            int newY = (int)y+direction[1];
+        for (int[] direction : directions) {
+            int newX = (int) x + direction[0];
+            int newY = (int) y + direction[1];
 
-            if (newX>=0&&newX<size&&newY>=0&&newY<size) {
+            if (newX >= 0 && newX < size && newY >= 0 && newY < size) {
                 char c = matrix.get(newX).get(newY);
-                if (currentChar==c) {
-                    mySet.add(newX+"-"+newY);
+                if (currentChar == c) {
+                    mySet.add(newX + "-" + newY);
                     recursiveFind(newX, newY, mySet);
                 }
             } else {
@@ -95,12 +96,12 @@ public class Day12Part1 {
         int perimeter = 4;
 
         for (int[] direction : directions) {
-            int newX = x+direction[0];
-            int newY = y+direction[1];
+            int newX = x + direction[0];
+            int newY = y + direction[1];
 
-            if (newX>=0&&newX<size&&newY>=0&&newY<size) {
+            if (newX >= 0 && newX < size && newY >= 0 && newY < size) {
                 char c = matrix.get(newX).get(newY);
-                if (currentChar==c) {
+                if (currentChar == c) {
                     perimeter--;
                 }
             }

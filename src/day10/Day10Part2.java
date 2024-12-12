@@ -18,18 +18,18 @@ public class Day10Part2 {
         int value;
         int x, y;
         List<int[]> edges;
-    
+
         public Node(int value, int x, int y) {
             this.value = value;
             this.x = x;
             this.y = y;
             this.edges = new ArrayList<>();
         }
-    
+
         public void addEdge(int x, int y) {
-            edges.add(new int[]{x, y});
+            edges.add(new int[] { x, y });
         }
-    
+
         @Override
         public String toString() {
             StringBuilder edgeList = new StringBuilder();
@@ -42,7 +42,7 @@ public class Day10Part2 {
             return "Node{value=" + value + ", edges=[" + edgeList + "]}";
         }
     }
-    
+
     public int processFile() {
         try {
             // Initialise matrix
@@ -52,7 +52,7 @@ public class Day10Part2 {
                 String line = scanner.nextLine();
                 char[] charArray = line.toCharArray();
                 List<Integer> row = new ArrayList<>();
-                for (int i=0; i<charArray.length; i++) {
+                for (int i = 0; i < charArray.length; i++) {
                     int num = charArray[i] - '0';
                     row.add(num);
                 }
@@ -62,56 +62,57 @@ public class Day10Part2 {
             int size = matrix.size();
 
             // Create initial nodes
-            for (int x=0; x<size; x++) {
+            for (int x = 0; x < size; x++) {
                 List<Node> nodeMatrixRow = new ArrayList<>();
-                for (int y=0; y<size; y++) {
-                    Node newNode = new Node(matrix.get(x).get(y),x,y);
+                for (int y = 0; y < size; y++) {
+                    Node newNode = new Node(matrix.get(x).get(y), x, y);
                     nodeMatrixRow.add(newNode);
                 }
                 nodeMatrix.add(nodeMatrixRow);
             }
 
             // Add children
-            for (int x=0; x<size; x++) {
-                for (int y=0; y<size; y++) {
+            for (int x = 0; x < size; x++) {
+                for (int y = 0; y < size; y++) {
                     Node node = nodeMatrix.get(x).get(y);
 
                     // Check right
-                    if (y<size-1) {
-                        Node nextNode = nodeMatrix.get(x).get(y+1);
-                        if (nextNode.value-node.value==1) {
-                            node.addEdge(x, y+1);
+                    if (y < size - 1) {
+                        Node nextNode = nodeMatrix.get(x).get(y + 1);
+                        if (nextNode.value - node.value == 1) {
+                            node.addEdge(x, y + 1);
                         }
                     }
                     // Check down
-                    if (x<size-1) {
-                        Node nextNode = nodeMatrix.get(x+1).get(y);
-                        if (nextNode.value-node.value==1) {
-                            node.addEdge(x+1, y);
+                    if (x < size - 1) {
+                        Node nextNode = nodeMatrix.get(x + 1).get(y);
+                        if (nextNode.value - node.value == 1) {
+                            node.addEdge(x + 1, y);
                         }
                     }
                     // Check left
-                    if (y>0) {
-                        Node nextNode = nodeMatrix.get(x).get(y-1);
-                        if (nextNode.value-node.value==1) {
-                            node.addEdge(x, y-1);
+                    if (y > 0) {
+                        Node nextNode = nodeMatrix.get(x).get(y - 1);
+                        if (nextNode.value - node.value == 1) {
+                            node.addEdge(x, y - 1);
                         }
                     }
                     // Check up
-                    if (x>0) {
-                        Node nextNode = nodeMatrix.get(x-1).get(y);
-                        if (nextNode.value-node.value==1) {
-                            node.addEdge(x-1, y);
+                    if (x > 0) {
+                        Node nextNode = nodeMatrix.get(x - 1).get(y);
+                        if (nextNode.value - node.value == 1) {
+                            node.addEdge(x - 1, y);
                         }
                     }
                 }
             }
 
             // Start checking from zeros
-            for (int x=0; x<size; x++) {
-                for (int y=0; y<size; y++) {
+            for (int x = 0; x < size; x++) {
+                for (int y = 0; y < size; y++) {
                     Node node = nodeMatrix.get(x).get(y);
-                    if (node.value != 0) continue;
+                    if (node.value != 0)
+                        continue;
                     // Traverse from zero
                     search(node, x, y);
                 }
@@ -126,8 +127,8 @@ public class Day10Part2 {
     private void search(Node originalNode, int x, int y) {
         Node node = nodeMatrix.get(x).get(y);
 
-        if (node.edges.size()==0) {
-            if (node.value==9) {
+        if (node.edges.size() == 0) {
+            if (node.value == 9) {
                 sum++;
             }
             return;

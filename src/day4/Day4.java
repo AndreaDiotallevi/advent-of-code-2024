@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Day4 {
-    public List<Character> word = new ArrayList<>(Arrays.asList('X','M','A','S'));
+    public List<Character> word = new ArrayList<>(Arrays.asList('X', 'M', 'A', 'S'));
     public List<List<Character>> matrix = new ArrayList<>();
     public int xSize = 0;
     public int ySize = 0;
@@ -32,19 +32,27 @@ public class Day4 {
 
             int sum = 0;
 
-            for (int x=0; x<xSize; x++) {
-                for (int y=0; y<ySize; y++) {
-                    if (right(x,y)) sum += 1;
-                    if (left(x,y)) sum += 1;
-                    if (up(x,y)) sum += 1;
-                    if (down(x,y)) sum += 1;
-                    if (rightDown(x,y)) sum += 1;
-                    if (rightUp(x,y)) sum += 1;
-                    if (leftDown(x,y)) sum += 1;
-                    if (leftUp(x,y)) sum += 1;
+            for (int x = 0; x < xSize; x++) {
+                for (int y = 0; y < ySize; y++) {
+                    if (right(x, y))
+                        sum += 1;
+                    if (left(x, y))
+                        sum += 1;
+                    if (up(x, y))
+                        sum += 1;
+                    if (down(x, y))
+                        sum += 1;
+                    if (rightDown(x, y))
+                        sum += 1;
+                    if (rightUp(x, y))
+                        sum += 1;
+                    if (leftDown(x, y))
+                        sum += 1;
+                    if (leftUp(x, y))
+                        sum += 1;
                 }
             }
-            
+
             return sum;
         } catch (FileNotFoundException e) {
             return -1;
@@ -56,8 +64,8 @@ public class Day4 {
             return false;
         }
 
-        for (int i=0; i<4; i++) {
-            if (matrix.get(x).get(y+i) != word.get(i)) {
+        for (int i = 0; i < 4; i++) {
+            if (matrix.get(x).get(y + i) != word.get(i)) {
                 return false;
             }
         }
@@ -74,8 +82,8 @@ public class Day4 {
             return false;
         }
 
-        for (int i=0; i<4; i++) {
-            if (matrix.get(x).get(y-i) != word.get(i)) {
+        for (int i = 0; i < 4; i++) {
+            if (matrix.get(x).get(y - i) != word.get(i)) {
                 return false;
             }
         }
@@ -88,8 +96,8 @@ public class Day4 {
             return false;
         }
 
-        for (int i=0; i<4; i++) {
-            if (matrix.get(x+i).get(y) != word.get(i)) {
+        for (int i = 0; i < 4; i++) {
+            if (matrix.get(x + i).get(y) != word.get(i)) {
                 return false;
             }
         }
@@ -102,8 +110,8 @@ public class Day4 {
             return false;
         }
 
-        for (int i=0; i<4; i++) {
-            if (matrix.get(x-i).get(y) != word.get(i)) {
+        for (int i = 0; i < 4; i++) {
+            if (matrix.get(x - i).get(y) != word.get(i)) {
                 return false;
             }
         }
@@ -116,8 +124,8 @@ public class Day4 {
             return false;
         }
 
-        for (int i=0; i<4; i++) {
-            if (matrix.get(x+i).get(y+i) != word.get(i)) {
+        for (int i = 0; i < 4; i++) {
+            if (matrix.get(x + i).get(y + i) != word.get(i)) {
                 return false;
             }
         }
@@ -130,8 +138,8 @@ public class Day4 {
             return false;
         }
 
-        for (int i=0; i<4; i++) {
-            if (matrix.get(x-i).get(y+i) != word.get(i)) {
+        for (int i = 0; i < 4; i++) {
+            if (matrix.get(x - i).get(y + i) != word.get(i)) {
                 return false;
             }
         }
@@ -144,8 +152,8 @@ public class Day4 {
             return false;
         }
 
-        for (int i=0; i<4; i++) {
-            if (matrix.get(x+i).get(y-i) != word.get(i)) {
+        for (int i = 0; i < 4; i++) {
+            if (matrix.get(x + i).get(y - i) != word.get(i)) {
                 return false;
             }
         }
@@ -158,8 +166,8 @@ public class Day4 {
             return false;
         }
 
-        for (int i=0; i<4; i++) {
-            if (matrix.get(x-i).get(y-i) != word.get(i)) {
+        for (int i = 0; i < 4; i++) {
+            if (matrix.get(x - i).get(y - i) != word.get(i)) {
                 return false;
             }
         }

@@ -46,8 +46,8 @@ public class Day2Part2 {
         int index = 0;
         boolean result = true;
 
-        while (index < length-1) {
-            if (nums.get(index) <= nums.get(index+1)) {
+        while (index < length - 1) {
+            if (nums.get(index) <= nums.get(index + 1)) {
                 result = false;
                 break;
             }
@@ -62,8 +62,8 @@ public class Day2Part2 {
         int index = 0;
         boolean result = true;
 
-        while (index < length-1) {
-            if (nums.get(index) >= nums.get(index+1)) {
+        while (index < length - 1) {
+            if (nums.get(index) >= nums.get(index + 1)) {
                 result = false;
                 break;
             }
@@ -78,8 +78,8 @@ public class Day2Part2 {
         int index = 0;
         boolean result = true;
 
-        while (index < length-1) {
-            if (Math.abs((nums.get(index) - nums.get(index+1))) >= 4) {
+        while (index < length - 1) {
+            if (Math.abs((nums.get(index) - nums.get(index + 1))) >= 4) {
                 result = false;
                 break;
             }
@@ -92,7 +92,7 @@ public class Day2Part2 {
     private List<List<Integer>> createSubArrays(List<Integer> nums) {
         List<List<Integer>> smallerLists = new ArrayList<>();
 
-        for (int i=0; i<nums.size(); i++) {
+        for (int i = 0; i < nums.size(); i++) {
             List<Integer> newList = new ArrayList<>(nums);
             newList.remove(i);
             smallerLists.add(newList);
@@ -107,7 +107,7 @@ public class Day2Part2 {
                 return true;
             } else if (alwaysIncreasing(list) && diffsLessThanFour(list)) {
                 return true;
-            } 
+            }
         }
 
         return false;

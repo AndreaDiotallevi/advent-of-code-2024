@@ -18,12 +18,11 @@ public class Day12Part2 {
     public List<Set<String>> listOfSets = new ArrayList<>();
     public Set<String> seen = new HashSet<>();
     List<int[]> directions = new ArrayList<>(Arrays.asList(
-        new int[]{0, 1},
-        new int[]{1, 0},
-        new int[]{0, -1},
-        new int[]{-1, 0}
-    ));
-    
+            new int[] { 0, 1 },
+            new int[] { 1, 0 },
+            new int[] { 0, -1 },
+            new int[] { -1, 0 }));
+
     public long processFile() {
         try {
             File file = new File("resources/day12.txt");
@@ -40,20 +39,21 @@ public class Day12Part2 {
             scanner.close();
             size = matrix.size();
 
-            for (int x=0; x<size; x++) {
-                for (int y=0; y<size; y++) {
-                    boolean completed = seen.contains(x+"-"+y);
-                    if (completed) continue;
+            for (int x = 0; x < size; x++) {
+                for (int y = 0; y < size; y++) {
+                    boolean completed = seen.contains(x + "-" + y);
+                    if (completed)
+                        continue;
                     Set<String> mySet = new HashSet<>();
-                    mySet.add(x+"-"+y);
+                    mySet.add(x + "-" + y);
                     listOfSets.add(mySet);
                     recursiveFind(x, y, mySet);
                 }
             }
 
-            long sum=0;
+            long sum = 0;
             for (Set<String> mySet : listOfSets) {
-                Map<String,Map<Integer,List<Integer>>> myMap = new HashMap<>();
+                Map<String, Map<Integer, List<Integer>>> myMap = new HashMap<>();
                 for (String item : mySet) {
                     String[] keySplit = item.split("-");
                     int x = Integer.parseInt(keySplit[0]);
@@ -68,12 +68,13 @@ public class Day12Part2 {
                         int count = 0;
                         List<Integer> innerArray = innerEntry.getValue();
                         Collections.sort(innerArray);
-                        if (innerArray.size()>0) count++;
+                        if (innerArray.size() > 0)
+                            count++;
 
-                        for (int k=0; k<innerArray.size()-1; k++) {
+                        for (int k = 0; k < innerArray.size() - 1; k++) {
                             int current = innerArray.get(k);
-                            int next = innerArray.get(k+1);
-                            if (Math.abs(next-current)!=1) {
+                            int next = innerArray.get(k + 1);
+                            if (Math.abs(next - current) != 1) {
                                 count++;
                             }
                         }
@@ -81,7 +82,7 @@ public class Day12Part2 {
                     }
                 }
 
-                sum+= mySet.size()*perimeter;
+                sum += mySet.size() * perimeter;
             }
             return sum;
         } catch (FileNotFoundException e) {
@@ -90,21 +91,21 @@ public class Day12Part2 {
     }
 
     private void recursiveFind(int x, int y, Set<String> mySet) {
-        boolean completed = seen.contains(x+"-"+y);
+        boolean completed = seen.contains(x + "-" + y);
         if (completed) {
             return;
         }
         char currentChar = matrix.get(x).get(y);
-        seen.add(x+"-"+y);
+        seen.add(x + "-" + y);
 
-        for (int[] direction: directions) {
-            int newX = (int)x+direction[0];
-            int newY = (int)y+direction[1];
+        for (int[] direction : directions) {
+            int newX = (int) x + direction[0];
+            int newY = (int) y + direction[1];
 
-            if (newX>=0&&newX<size&&newY>=0&&newY<size) {
+            if (newX >= 0 && newX < size && newY >= 0 && newY < size) {
                 char c = matrix.get(newX).get(newY);
-                if (currentChar==c) {
-                    mySet.add(newX+"-"+newY);
+                if (currentChar == c) {
+                    mySet.add(newX + "-" + newY);
                     recursiveFind(newX, newY, mySet);
                 }
             } else {
@@ -113,39 +114,43 @@ public class Day12Part2 {
         }
     }
 
-    private void getPerimeter(int x, int y, Map<String,Map<Integer,List<Integer>>> map1) {
+    private void getPerimeter(int x, int y, Map<String, Map<Integer, List<Integer>>> map1) {
         char currentChar = matrix.get(x).get(y);
 
         for (int[] direction : directions) {
-            int newX = x+direction[0];
-            int newY = y+direction[1];
+            int newX = x + direction[0];
+            int newY = y + direction[1];
 
-            if (newX>=0&&newX<size&&newY>=0&&newY<size) {
+            if (newX >= 0 && newX < size && newY >= 0 && newY < size) {
                 char c = matrix.get(newX).get(newY);
-                if (currentChar!=c) {
-                    String key = direction[0]+"-"+direction[1];
-                    Map<Integer,List<Integer>> map2 = map1.get(key);
-                    if (map2 == null) map2 = new HashMap<>();
+                if (currentChar != c) {
+                    String key = direction[0] + "-" + direction[1];
+                    Map<Integer, List<Integer>> map2 = map1.get(key);
+                    if (map2 == null)
+                        map2 = new HashMap<>();
 
-                    int key2 = direction[0]==0 ? y : x;
-                    int value2 = key2==x ? y : x;
+                    int key2 = direction[0] == 0 ? y : x;
+                    int value2 = key2 == x ? y : x;
 
                     List<Integer> mylist = map2.get(key2);
-                    if (mylist==null) mylist = new ArrayList<>();
+                    if (mylist == null)
+                        mylist = new ArrayList<>();
                     mylist.add(value2);
                     map2.put(key2, mylist);
                     map1.put(key, map2);
                 }
             } else {
-                String key = direction[0]+"-"+direction[1];
-                Map<Integer,List<Integer>> map2 = map1.get(key);
-                if (map2 == null) map2 = new HashMap<>();
+                String key = direction[0] + "-" + direction[1];
+                Map<Integer, List<Integer>> map2 = map1.get(key);
+                if (map2 == null)
+                    map2 = new HashMap<>();
 
-                int key2 = direction[0]==0 ? y : x;
-                int value2 = key2==x ? y : x;
+                int key2 = direction[0] == 0 ? y : x;
+                int value2 = key2 == x ? y : x;
 
                 List<Integer> mylist = map2.get(key2);
-                if (mylist==null) mylist = new ArrayList<>();
+                if (mylist == null)
+                    mylist = new ArrayList<>();
                 mylist.add(value2);
                 map2.put(key2, mylist);
                 map1.put(key, map2);

@@ -26,13 +26,17 @@ public class Day6Part1 {
 
                 List<Character> row = new ArrayList<>();
 
-                for (int i=0; i<charArray.length; i++) {
+                for (int i = 0; i < charArray.length; i++) {
                     char c = charArray[i];
                     row.add(c);
-                    if (c == '^') currentDirectionIndex = 0; 
-                    if (c == '>') currentDirectionIndex = 1; 
-                    if (c == 'v') currentDirectionIndex = 2; 
-                    if (c == '<') currentDirectionIndex = 3; 
+                    if (c == '^')
+                        currentDirectionIndex = 0;
+                    if (c == '>')
+                        currentDirectionIndex = 1;
+                    if (c == 'v')
+                        currentDirectionIndex = 2;
+                    if (c == '<')
+                        currentDirectionIndex = 3;
 
                     if (c == '^' || c == '>' || c == 'v' || c == '<') {
                         currentPoint.setLocation(matrix.size(), i);
@@ -53,20 +57,26 @@ public class Day6Part1 {
             while (!finished) {
                 String currentDirection = directions.get(currentDirectionIndex % 4);
                 Point nextPoint = new Point();
-                
-                if (currentDirection=="up") nextPoint.setLocation(currentPoint.x-1, currentPoint.y);
-                if (currentDirection=="right") nextPoint.setLocation(currentPoint.x, currentPoint.y+1);
-                if (currentDirection=="down") nextPoint.setLocation(currentPoint.x+1, currentPoint.y);
-                if (currentDirection=="left") nextPoint.setLocation(currentPoint.x, currentPoint.y-1);
 
-                if (matrix.get(nextPoint.x).get(nextPoint.y)=='#') {
+                if (currentDirection == "up")
+                    nextPoint.setLocation(currentPoint.x - 1, currentPoint.y);
+                if (currentDirection == "right")
+                    nextPoint.setLocation(currentPoint.x, currentPoint.y + 1);
+                if (currentDirection == "down")
+                    nextPoint.setLocation(currentPoint.x + 1, currentPoint.y);
+                if (currentDirection == "left")
+                    nextPoint.setLocation(currentPoint.x, currentPoint.y - 1);
+
+                if (matrix.get(nextPoint.x).get(nextPoint.y) == '#') {
                     currentDirectionIndex++;
                     // System.out.println(directions.get(currentDirectionIndex%4));
                 } else {
-                    if (!travelledPointsSet.contains(nextPoint))  travelledPointsSet.add(nextPoint);
-                   
+                    if (!travelledPointsSet.contains(nextPoint))
+                        travelledPointsSet.add(nextPoint);
+
                     currentPoint.setLocation(nextPoint);
-                    if (currentPoint.x==size-1 || currentPoint.y==size-1) finished = true;
+                    if (currentPoint.x == size - 1 || currentPoint.y == size - 1)
+                        finished = true;
                 }
             }
 

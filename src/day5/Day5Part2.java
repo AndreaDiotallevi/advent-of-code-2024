@@ -12,7 +12,7 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class Day5Part2 {
-    public Map<Integer,Set<Integer>> map = new HashMap<>();
+    public Map<Integer, Set<Integer>> map = new HashMap<>();
 
     public int processFile() {
         try {
@@ -24,7 +24,8 @@ public class Day5Part2 {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
 
-                if (line == "") break;
+                if (line == "")
+                    break;
 
                 String[] inputs = line.split("\\|");
                 int left = Integer.parseInt(inputs[0]);
@@ -50,12 +51,13 @@ public class Day5Part2 {
                     collection.add(Integer.parseInt(str));
                 }
 
-                for (int i=collection.size()-1; i>0; i--) {
+                for (int i = collection.size() - 1; i > 0; i--) {
                     int current = collection.get(i);
                     for (int previous : collection.subList(0, i)) {
                         if (map.get(current) != null && map.get(current).contains(previous)) {
                             valid = false;
-                        };
+                        }
+                        ;
                     }
                 }
 
@@ -63,24 +65,24 @@ public class Day5Part2 {
                     int loopIndex = 0;
 
                     while (loopIndex < 5) {
-                        for (Map.Entry<Integer,Set<Integer>> mapEntry : map.entrySet()) {
+                        for (Map.Entry<Integer, Set<Integer>> mapEntry : map.entrySet()) {
                             int currentLeft = mapEntry.getKey();
-                            
+
                             for (int setEntry : mapEntry.getValue()) {
                                 if (collection.contains(currentLeft) && collection.contains(setEntry)) {
                                     int leftIndex = collection.indexOf(currentLeft);
                                     int rightIndex = collection.indexOf(setEntry);
-                                    
+
                                     if (leftIndex > rightIndex) {
                                         Collections.swap(collection, leftIndex, rightIndex);
-                                    }  
+                                    }
                                 }
                             }
                         }
                         loopIndex++;
                     }
 
-                    sum += collection.get(collection.size()/2);
+                    sum += collection.get(collection.size() / 2);
                 }
             }
 

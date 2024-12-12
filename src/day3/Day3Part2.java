@@ -14,30 +14,30 @@ public class Day3Part2 {
 
             String regex = "mul\\((\\d+),(\\d+)\\)";
             Pattern pattern = Pattern.compile(regex);
-            
+
             int sum = 0;
 
             while (scanner.hasNextLine()) {
                 System.out.println("here");
                 String line = scanner.nextLine();
-                
+
                 String patternRemoval = "(?<=don't\\(\\)).*?(?=do\\(\\))";
                 String modifiedLine = line.replaceAll(patternRemoval, "");
                 Matcher matcher = pattern.matcher(modifiedLine);
 
                 while (matcher.find()) {
                     String fullMatch = matcher.group(0);
-                    
+
                     String firstInteger = matcher.group(1);
                     String secondInteger = matcher.group(2);
-                    System.out.printf("%s %s %n",firstInteger,secondInteger);
-                    
+                    System.out.printf("%s %s %n", firstInteger, secondInteger);
+
                     sum += Integer.parseInt(firstInteger) * Integer.parseInt(secondInteger);
-                    
+
                     System.out.printf("Pattern: %s -> Integers: %s, %s%n", fullMatch, firstInteger, secondInteger);
                 }
             }
-            
+
             scanner.close();
             return sum;
         } catch (FileNotFoundException e) {

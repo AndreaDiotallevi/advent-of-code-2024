@@ -33,7 +33,7 @@ public class Day2 {
                     sum += 1;
                 } else if (alwaysIncreasing(list) && diffsLessThanFour(list)) {
                     sum += 1;
-                } 
+                }
 
             }
 
@@ -49,8 +49,8 @@ public class Day2 {
         int index = 0;
         boolean result = true;
 
-        while (index < length-1) {
-            if (nums.get(index) <= nums.get(index+1)) {
+        while (index < length - 1) {
+            if (nums.get(index) <= nums.get(index + 1)) {
                 result = false;
                 break;
             }
@@ -65,8 +65,8 @@ public class Day2 {
         int index = 0;
         boolean result = true;
 
-        while (index < length-1) {
-            if (nums.get(index) >= nums.get(index+1)) {
+        while (index < length - 1) {
+            if (nums.get(index) >= nums.get(index + 1)) {
                 result = false;
                 break;
             }
@@ -81,8 +81,8 @@ public class Day2 {
         int index = 0;
         boolean result = true;
 
-        while (index < length-1) {
-            if (Math.abs((nums.get(index) - nums.get(index+1))) >= 4) {
+        while (index < length - 1) {
+            if (Math.abs((nums.get(index) - nums.get(index + 1))) >= 4) {
                 result = false;
                 break;
             }

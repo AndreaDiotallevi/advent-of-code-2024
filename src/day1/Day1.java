@@ -17,7 +17,7 @@ public class Day1 {
             myList.add(new ArrayList<>());
             myList.add(new ArrayList<>());
 
-            while(scanner.hasNextInt()) {
+            while (scanner.hasNextInt()) {
                 int left = scanner.nextInt();
                 int right = scanner.nextInt();
 

@@ -13,17 +13,21 @@ public class Day11Part1 {
         class Node {
             long value;
             Node next;
+
             public Node(long value) {
                 this.value = value;
                 this.next = null;
             }
+
             public void setNext(Node node) {
                 this.next = node;
             }
         }
+
         Node head;
         Node tail;
         long size;
+
         public MyLinkedlist() {
             this.head = null;
             this.tail = null;
@@ -33,7 +37,7 @@ public class Day11Part1 {
         public void append(long value) {
             // System.out.println(value);
             Node newNode = new Node(value);
-            if (size==0) {
+            if (size == 0) {
                 this.head = newNode;
                 this.tail = newNode;
             } else {
@@ -60,9 +64,9 @@ public class Day11Part1 {
             Node previousNode = null;
 
             while (currentNode != null) {
-                if (currentNode.value==0) {
+                if (currentNode.value == 0) {
                     // System.out.println("node is zero");
-                    currentNode.value=1;
+                    currentNode.value = 1;
                     // System.out.println("current node value");
                     // System.out.println(currentNode.value);
                     Node tempNext = currentNode.next;
@@ -73,15 +77,15 @@ public class Day11Part1 {
                     // System.out.println(" ");
                     // System.out.println(previousNode.value);
                     continue;
-                } 
+                }
 
                 String integerString = String.valueOf(currentNode.value);
                 int integerStringLength = integerString.length();
 
                 if (integerStringLength % 2 == 0) {
                     // System.out.println("event digits");
-                    String subString1 = integerString.substring(0, integerStringLength/2);
-                    String subString2 = integerString.substring(integerStringLength/2);
+                    String subString1 = integerString.substring(0, integerStringLength / 2);
+                    String subString2 = integerString.substring(integerStringLength / 2);
                     Node newNode1 = new Node(Long.parseLong(subString1));
                     Node newNode2 = new Node(Long.parseLong(subString2));
                     Node tempNext = currentNode.next;
@@ -98,7 +102,7 @@ public class Day11Part1 {
                     continue;
                 }
 
-                currentNode.value=currentNode.value*2024;
+                currentNode.value = currentNode.value * 2024;
                 Node tempNext = currentNode.next;
                 previousNode = currentNode;
                 currentNode = tempNext;
@@ -123,7 +127,7 @@ public class Day11Part1 {
 
             // Loop n times
             long times = 25;
-            for (long i=0; i<times; i++) {
+            for (long i = 0; i < times; i++) {
                 // System.out.println(i);
                 mylist.changeStones();
                 mylist.printList();

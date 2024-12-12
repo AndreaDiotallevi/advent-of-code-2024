@@ -19,30 +19,31 @@ public class Day9Part1 {
 
             int id = 0;
 
-            for (int i=0; i<line.length(); i++) {
+            for (int i = 0; i < line.length(); i++) {
                 boolean isBlockFile = (i & 1) == 0;
                 char currentChar = line.charAt(i);
 
                 long times = currentChar - '0';
-                for (long j=0; j<times; j++) {
+                for (long j = 0; j < times; j++) {
                     if (isBlockFile) {
                         memory.add(id);
                         // for (char c : String.valueOf(id).toCharArray()) {
-                        //     memory.add(c - '0');
+                        // memory.add(c - '0');
                         // }
                     } else {
                         memory.add(-1);
                     }
                 }
-                if (isBlockFile) id++;
+                if (isBlockFile)
+                    id++;
             }
 
             // System.out.println(memory);
 
-            int i=0;
-            int j=memory.size()-1;
+            int i = 0;
+            int j = memory.size() - 1;
 
-            while (i<j) {
+            while (i < j) {
                 boolean found = false;
 
                 while (!found) {
@@ -63,7 +64,8 @@ public class Day9Part1 {
                     }
                 }
 
-                if (i>=j) break;
+                if (i >= j)
+                    break;
 
                 Collections.swap(memory, i, j);
                 i++;
@@ -72,8 +74,8 @@ public class Day9Part1 {
 
             // System.out.println(memory);
 
-            long sum=0;
-            for (int k=0; k<memory.size(); k++) {
+            long sum = 0;
+            for (int k = 0; k < memory.size(); k++) {
                 int num = memory.get(k);
                 if (num != -1) {
                     sum += num * k;

@@ -17,7 +17,7 @@ public class Day1Part2 {
             Scanner scanner = new Scanner(file);
 
             List<Integer> leftList = new ArrayList<>();
-            Map<Integer,Integer> rightMap = new HashMap<>();
+            Map<Integer, Integer> rightMap = new HashMap<>();
 
             while (scanner.hasNextInt()) {
                 int left = scanner.nextInt();
@@ -29,7 +29,7 @@ public class Day1Part2 {
 
                 if (rightMap.containsKey(right)) {
                     int currentValue = rightMap.get(right);
-                    rightMap.put(right, currentValue+1);
+                    rightMap.put(right, currentValue + 1);
                 } else {
                     rightMap.put(right, 1);
                 }

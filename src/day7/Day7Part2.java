@@ -21,7 +21,8 @@ public class Day7Part2 {
                 resultList.add(Long.parseLong(values[0]));
                 String[] factorsString = values[1].split(" ");
                 List<Long> item = new ArrayList<>();
-                for (String s : factorsString) item.add(Long.parseLong(s));
+                for (String s : factorsString)
+                    item.add(Long.parseLong(s));
                 factorsList.add(item);
             }
             scanner.close();
@@ -29,23 +30,25 @@ public class Day7Part2 {
             long sum = 0;
             int radix = 3;
 
-            for (int i=0; i<resultList.size(); i++) {
+            for (int i = 0; i < resultList.size(); i++) {
                 Long result = resultList.get(i);
                 List<Long> factors = factorsList.get(i);
 
-                Long binarySize = (long)factors.size()-1;
+                Long binarySize = (long) factors.size() - 1;
 
-                for (int j=0; j<Math.pow(radix, binarySize); j++) {
+                for (int j = 0; j < Math.pow(radix, binarySize); j++) {
                     String base3 = Long.toString(j, radix);
                     String padded = String.format("%" + binarySize + "s", base3).replace(' ', '0');
 
                     long equationResult = factors.get(0);
 
-                    for (int k=1; k<factors.size(); k++) {
+                    for (int k = 1; k < factors.size(); k++) {
                         long currentFactor = factors.get(k);
-                        char operator = padded.charAt(k-1);
-                        if (operator == '0') equationResult += currentFactor;
-                        if (operator == '1') equationResult *= currentFactor;
+                        char operator = padded.charAt(k - 1);
+                        if (operator == '0')
+                            equationResult += currentFactor;
+                        if (operator == '1')
+                            equationResult *= currentFactor;
                         if (operator == '2') {
                             String str = String.valueOf(equationResult) + String.valueOf(currentFactor);
                             Long num = Long.parseLong(str);

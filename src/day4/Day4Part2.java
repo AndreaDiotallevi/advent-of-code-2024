@@ -30,10 +30,10 @@ public class Day4Part2 {
 
             int sum = 0;
 
-            for (int x=1; x<xSize-1; x++) {
-                for (int y=1; y<ySize-1; y++) {
+            for (int x = 1; x < xSize - 1; x++) {
+                for (int y = 1; y < ySize - 1; y++) {
                     if (matrix.get(x).get(y) != 'A') {
-                        // Do nothing 
+                        // Do nothing
                     } else {
                         if (check(x, y)) {
                             sum += 1;
@@ -41,7 +41,7 @@ public class Day4Part2 {
                     }
                 }
             }
-            
+
             return sum;
         } catch (FileNotFoundException e) {
             return -1;
@@ -49,15 +49,17 @@ public class Day4Part2 {
     }
 
     private boolean check(int x, int y) {
-        char char1 = matrix.get(x+1).get(y+1);
-        char char2 = matrix.get(x-1).get(y-1);
+        char char1 = matrix.get(x + 1).get(y + 1);
+        char char2 = matrix.get(x - 1).get(y - 1);
 
-        if (!((char1=='M' && char2=='S')||(char1=='S' && char2=='M'))) return false;
+        if (!((char1 == 'M' && char2 == 'S') || (char1 == 'S' && char2 == 'M')))
+            return false;
 
-        char char3 = matrix.get(x+1).get(y-1);
-        char char4 = matrix.get(x-1).get(y+1);
+        char char3 = matrix.get(x + 1).get(y - 1);
+        char char4 = matrix.get(x - 1).get(y + 1);
 
-        if (!((char3=='M' && char4=='S')||(char3=='S' && char4=='M'))) return false;
+        if (!((char3 == 'M' && char4 == 'S') || (char3 == 'S' && char4 == 'M')))
+            return false;
 
         return true;
     }

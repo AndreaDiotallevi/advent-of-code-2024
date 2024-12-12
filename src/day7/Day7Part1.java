@@ -21,31 +21,36 @@ public class Day7Part1 {
                 resultList.add(Long.parseLong(values[0]));
                 String[] factorsString = values[1].split(" ");
                 List<Long> item = new ArrayList<>();
-                for (String s : factorsString) item.add(Long.parseLong(s));
+                for (String s : factorsString)
+                    item.add(Long.parseLong(s));
                 factorsList.add(item);
             }
             scanner.close();
 
             long sum = 0;
 
-            for (int i=0; i<resultList.size(); i++) {
+            for (int i = 0; i < resultList.size(); i++) {
                 Long result = resultList.get(i);
                 List<Long> factors = factorsList.get(i);
 
-                Long binarySize = (long)factors.size()-1;
+                Long binarySize = (long) factors.size() - 1;
 
-                for (int j=0; j<Math.pow(2, binarySize); j++) {
-                    String paddedBinary = String.format("%" + binarySize + "s", Long.toBinaryString(j)).replace(' ', '0');
+                for (int j = 0; j < Math.pow(2, binarySize); j++) {
+                    String paddedBinary = String.format("%" + binarySize + "s", Long.toBinaryString(j)).replace(' ',
+                            '0');
                     String operatorsString = paddedBinary.replace('0', '+').replace('1', '*');
 
                     long equationResult = factors.get(0);
 
-                    for (int k=1; k<factors.size(); k++) {
+                    for (int k = 1; k < factors.size(); k++) {
                         long currentFactor = factors.get(k);
-                        char operator = operatorsString.charAt(k-1);
-                        if (operator == '+') equationResult += currentFactor;
-                        if (operator == '*') equationResult *= currentFactor;
-                        if (equationResult > result) break;
+                        char operator = operatorsString.charAt(k - 1);
+                        if (operator == '+')
+                            equationResult += currentFactor;
+                        if (operator == '*')
+                            equationResult *= currentFactor;
+                        if (equationResult > result)
+                            break;
                     }
 
                     if (equationResult == result) {

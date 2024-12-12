@@ -11,7 +11,7 @@ import java.util.Scanner;
 import java.util.Set;
 
 public class Day5 {
-    public Map<Integer,Set<Integer>> map = new HashMap<>();
+    public Map<Integer, Set<Integer>> map = new HashMap<>();
 
     public int processFile() {
         try {
@@ -23,7 +23,8 @@ public class Day5 {
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
 
-                if (line == "") break;
+                if (line == "")
+                    break;
 
                 String[] inputs = line.split("\\|");
                 int left = Integer.parseInt(inputs[0]);
@@ -51,12 +52,13 @@ public class Day5 {
                     collection.add(Integer.parseInt(str));
                 }
 
-                for (int i=collection.size()-1; i>0; i--) {
+                for (int i = collection.size() - 1; i > 0; i--) {
                     int current = collection.get(i);
                     for (int previous : collection.subList(0, i)) {
                         if (map.get(current) != null && map.get(current).contains(previous)) {
                             valid = false;
-                        };
+                        }
+                        ;
                     }
                 }
 
