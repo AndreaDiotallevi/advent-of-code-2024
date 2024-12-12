@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -25,7 +26,7 @@ public class Day12Part2 {
     
     public long processFile() {
         try {
-            File file = new File("resources/day12test5.txt");
+            File file = new File("resources/day12.txt");
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
@@ -41,11 +42,8 @@ public class Day12Part2 {
 
             for (int x=0; x<size; x++) {
                 for (int y=0; y<size; y++) {
-                    // if (matrix.get(x).get(y)!='C') continue;
                     boolean completed = seen.contains(x+"-"+y);
                     if (completed) continue;
-                    // System.out.println(" ");
-                    // System.out.println("new set");
                     Set<String> mySet = new HashSet<>();
                     mySet.add(x+"-"+y);
                     listOfSets.add(mySet);
@@ -53,12 +51,8 @@ public class Day12Part2 {
                 }
             }
 
-            System.out.println(listOfSets.size());
-            System.out.println(" ");
-            
             long sum=0;
             for (Set<String> mySet : listOfSets) {
-                System.out.println(" ");
                 Map<String,Map<Integer,List<Integer>>> myMap = new HashMap<>();
                 for (String item : mySet) {
                     String[] keySplit = item.split("-");
@@ -66,7 +60,6 @@ public class Day12Part2 {
                     int y = Integer.parseInt(keySplit[1]);
                     getPerimeter(x, y, myMap);
                 }
-                System.out.println(myMap);
                 long perimeter = 0;
 
                 for (Map.Entry<String, Map<Integer, List<Integer>>> outerEntry : myMap.entrySet()) {
@@ -74,12 +67,13 @@ public class Day12Part2 {
                     for (Map.Entry<Integer, List<Integer>> innerEntry : innerMap.entrySet()) {
                         int count = 0;
                         List<Integer> innerArray = innerEntry.getValue();
+                        Collections.sort(innerArray);
                         if (innerArray.size()>0) count++;
 
                         for (int k=0; k<innerArray.size()-1; k++) {
                             int current = innerArray.get(k);
                             int next = innerArray.get(k+1);
-                            if (next-current!=1) {
+                            if (Math.abs(next-current)!=1) {
                                 count++;
                             }
                         }
@@ -87,7 +81,6 @@ public class Day12Part2 {
                     }
                 }
 
-                System.out.println(perimeter);
                 sum+= mySet.size()*perimeter;
             }
             return sum;
@@ -122,7 +115,6 @@ public class Day12Part2 {
 
     private void getPerimeter(int x, int y, Map<String,Map<Integer,List<Integer>>> map1) {
         char currentChar = matrix.get(x).get(y);
-        System.out.println(currentChar + "-" + x + "-" + y);
 
         for (int[] direction : directions) {
             int newX = x+direction[0];

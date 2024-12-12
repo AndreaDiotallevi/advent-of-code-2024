@@ -40,11 +40,8 @@ public class Day12Part1 {
 
             for (int x=0; x<size; x++) {
                 for (int y=0; y<size; y++) {
-                    // if (matrix.get(x).get(y)!='C') continue;
                     boolean completed = seen.contains(x+"-"+y);
                     if (completed) continue;
-                    System.out.println(" ");
-                    System.out.println("new set");
                     Set<String> mySet = new HashSet<>();
                     mySet.add(x+"-"+y);
                     listOfSets.add(mySet);
@@ -52,8 +49,6 @@ public class Day12Part1 {
                 }
             }
 
-            System.out.println(listOfSets.size());
-            
             long sum=0;
             for (Set<String> mySet : listOfSets) {
                 long perimeter = 0;
@@ -72,45 +67,24 @@ public class Day12Part1 {
     }
 
     private void recursiveFind(int x, int y, Set<String> mySet) {
-        System.out.printf("(%d,%d)%n",x,y);
         boolean completed = seen.contains(x+"-"+y);
         if (completed) {
-            System.out.println("was seen: "+x+"-"+y);
             return;
         }
-        System.out.println("seen does not contain: "+ x+"-"+y);
         char currentChar = matrix.get(x).get(y);
         seen.add(x+"-"+y);
 
         for (int[] direction: directions) {
-            System.out.println("====");
-            // System.out.println("direction"+direction[0]+",,,"+direction[1]);
-            System.out.println("directions");
-            System.out.println(direction[0]);
-            System.out.println(direction[1]);
             int newX = (int)x+direction[0];
             int newY = (int)y+direction[1];
-            System.out.println("x & y");
-            System.out.println(x);
-            System.out.println(y);
-            System.out.println("newx & newy");
-            System.out.println(newX);
-            System.out.println(newY);
-            // System.out.println("newx newy"+newX+",,,"+newY);
 
             if (newX>=0&&newX<size&&newY>=0&&newY<size) {
-                System.out.println("newx newy"+newX+",,,"+newY);
-                System.out.println("inside grid");
                 char c = matrix.get(newX).get(newY);
                 if (currentChar==c) {
-                    System.out.println(currentChar);
-                    System.out.println("add"+newX+"-"+newY);
                     mySet.add(newX+"-"+newY);
                     recursiveFind(newX, newY, mySet);
                 }
-                System.out.println("not same char");
             } else {
-                System.out.println("out of grid");
                 continue;
             }
         }
