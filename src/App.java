@@ -91,7 +91,10 @@ public class App {
         // long result = new Day11Part2().processFile();
         // System.out.println(result);
 
+        final long startTime = System.currentTimeMillis();
         long result = new Day12Part2().processFile();
         System.out.println(result);
+        final long endTime = System.currentTimeMillis();
+        System.out.println("Total execution time: " + (endTime - startTime));
     }
 }
