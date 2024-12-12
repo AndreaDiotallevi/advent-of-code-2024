@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -23,7 +25,7 @@ public class Day12Part2 {
     
     public long processFile() {
         try {
-            File file = new File("resources/day12test3.txt");
+            File file = new File("resources/day12test5.txt");
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
@@ -56,15 +58,36 @@ public class Day12Part2 {
             
             long sum=0;
             for (Set<String> mySet : listOfSets) {
-                Set<String> mySetPerimeter = new HashSet<>();
+                System.out.println(" ");
+                Map<String,Map<Integer,List<Integer>>> myMap = new HashMap<>();
                 for (String item : mySet) {
                     String[] keySplit = item.split("-");
                     int x = Integer.parseInt(keySplit[0]);
                     int y = Integer.parseInt(keySplit[1]);
-                    getPerimeter(x, y, mySetPerimeter);
+                    getPerimeter(x, y, myMap);
                 }
-                long perimeter = mySetPerimeter.size();
-                // System.out.println(perimeter);
+                System.out.println(myMap);
+                long perimeter = 0;
+
+                for (Map.Entry<String, Map<Integer, List<Integer>>> outerEntry : myMap.entrySet()) {
+                    Map<Integer, List<Integer>> innerMap = outerEntry.getValue();
+                    for (Map.Entry<Integer, List<Integer>> innerEntry : innerMap.entrySet()) {
+                        int count = 0;
+                        List<Integer> innerArray = innerEntry.getValue();
+                        if (innerArray.size()>0) count++;
+
+                        for (int k=0; k<innerArray.size()-1; k++) {
+                            int current = innerArray.get(k);
+                            int next = innerArray.get(k+1);
+                            if (next-current!=1) {
+                                count++;
+                            }
+                        }
+                        perimeter += count;
+                    }
+                }
+
+                System.out.println(perimeter);
                 sum+= mySet.size()*perimeter;
             }
             return sum;
@@ -74,53 +97,32 @@ public class Day12Part2 {
     }
 
     private void recursiveFind(int x, int y, Set<String> mySet) {
-        // System.out.printf("(%d,%d)%n",x,y);
         boolean completed = seen.contains(x+"-"+y);
         if (completed) {
-            // System.out.println("was seen: "+x+"-"+y);
             return;
         }
-        // System.out.println("seen does not contain: "+ x+"-"+y);
         char currentChar = matrix.get(x).get(y);
         seen.add(x+"-"+y);
 
         for (int[] direction: directions) {
-            // System.out.println("====");
-            // System.out.println("direction"+direction[0]+",,,"+direction[1]);
-            // System.out.println("directions");
-            // System.out.println(direction[0]);
-            // System.out.println(direction[1]);
             int newX = (int)x+direction[0];
             int newY = (int)y+direction[1];
-            // System.out.println("x & y");
-            // System.out.println(x);
-            // System.out.println(y);
-            // System.out.println("newx & newy");
-            // System.out.println(newX);
-            // System.out.println(newY);
-            // System.out.println("newx newy"+newX+",,,"+newY);
 
             if (newX>=0&&newX<size&&newY>=0&&newY<size) {
-                // System.out.println("newx newy"+newX+",,,"+newY);
-                // System.out.println("inside grid");
                 char c = matrix.get(newX).get(newY);
                 if (currentChar==c) {
-                    // System.out.println(currentChar);
-                    // System.out.println("add"+newX+"-"+newY);
                     mySet.add(newX+"-"+newY);
                     recursiveFind(newX, newY, mySet);
                 }
-                // System.out.println("not same char");
             } else {
-                // System.out.println("out of grid");
                 continue;
             }
         }
     }
 
-    private void getPerimeter(int x, int y, Set<String> mySet) {
+    private void getPerimeter(int x, int y, Map<String,Map<Integer,List<Integer>>> map1) {
         char currentChar = matrix.get(x).get(y);
-        // System.out.println(currentChar + "-" + x + "-" + y);
+        System.out.println(currentChar + "-" + x + "-" + y);
 
         for (int[] direction : directions) {
             int newX = x+direction[0];
@@ -129,24 +131,32 @@ public class Day12Part2 {
             if (newX>=0&&newX<size&&newY>=0&&newY<size) {
                 char c = matrix.get(newX).get(newY);
                 if (currentChar!=c) {
-                    boolean vertical = direction[0]==0;
-                    if (vertical) {
-                        // System.out.println("vertical");
-                        mySet.add("h"+"-"+newY);
-                    } else {
-                        // System.out.println("horizontal");
-                        mySet.add("v"+"-"+newX);
-                    }
+                    String key = direction[0]+"-"+direction[1];
+                    Map<Integer,List<Integer>> map2 = map1.get(key);
+                    if (map2 == null) map2 = new HashMap<>();
+
+                    int key2 = direction[0]==0 ? y : x;
+                    int value2 = key2==x ? y : x;
+
+                    List<Integer> mylist = map2.get(key2);
+                    if (mylist==null) mylist = new ArrayList<>();
+                    mylist.add(value2);
+                    map2.put(key2, mylist);
+                    map1.put(key, map2);
                 }
             } else {
-                boolean vertical = direction[0]==0;
-                if (vertical) {
-                    // System.out.println("vertical");
-                    mySet.add("h"+"-"+newY);
-                } else {
-                    // System.out.println("horizontal");
-                    mySet.add("v"+"-"+newX);
-                }
+                String key = direction[0]+"-"+direction[1];
+                Map<Integer,List<Integer>> map2 = map1.get(key);
+                if (map2 == null) map2 = new HashMap<>();
+
+                int key2 = direction[0]==0 ? y : x;
+                int value2 = key2==x ? y : x;
+
+                List<Integer> mylist = map2.get(key2);
+                if (mylist==null) mylist = new ArrayList<>();
+                mylist.add(value2);
+                map2.put(key2, mylist);
+                map1.put(key, map2);
             }
         }
     }
