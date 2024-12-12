@@ -5,34 +5,26 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 
 public class Day12Part1 {
-    public List<Group> groups = new ArrayList<>();
-    public Map<String,Group> myMap = new HashMap<>();
     public List<List<Character>> matrix = new ArrayList<>();
     public int size;
+    public List<Set<String>> listOfSets = new ArrayList<>();
+    public Set<String> seen = new HashSet<>();
     List<int[]> directions = new ArrayList<>(Arrays.asList(
         new int[]{0, 1},
         new int[]{1, 0},
         new int[]{0, -1},
         new int[]{-1, 0}
     ));
-
-    class Group {
-        long area;
-        long perimeter;
-        public Group() {
-            this.area=0;
-            this.perimeter=0;
-        }
-    }
     
     public long processFile() {
         try {
-            File file = new File("resources/day12test2.txt");
+            File file = new File("resources/day12.txt");
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
@@ -44,25 +36,34 @@ public class Day12Part1 {
                 matrix.add(row);
             }
             scanner.close();
-            System.out.println(matrix);
             size = matrix.size();
-            System.out.println(" ");
 
             for (int x=0; x<size; x++) {
                 for (int y=0; y<size; y++) {
-                    Group group = getGroup(x, y);
-                    int perimeter = getPerimeter(x, y);
-                    group.area++;
-                    group.perimeter+=perimeter;
+                    // if (matrix.get(x).get(y)!='C') continue;
+                    boolean completed = seen.contains(x+"-"+y);
+                    if (completed) continue;
+                    System.out.println(" ");
+                    System.out.println("new set");
+                    Set<String> mySet = new HashSet<>();
+                    mySet.add(x+"-"+y);
+                    listOfSets.add(mySet);
+                    recursiveFind(x, y, mySet);
                 }
             }
 
-            System.out.println(groups.size());
-            System.out.println(" ");
+            System.out.println(listOfSets.size());
+            
             long sum=0;
-            for (Group group : groups) {
-                sum+=group.area*group.perimeter;
-                System.out.println(group.area+"-"+group.perimeter);
+            for (Set<String> mySet : listOfSets) {
+                long perimeter = 0;
+                for (String item : mySet) {
+                    String[] keySplit = item.split("-");
+                    int x = Integer.parseInt(keySplit[0]);
+                    int y = Integer.parseInt(keySplit[1]);
+                    perimeter+= getPerimeter(x, y);
+                }
+                sum+= mySet.size()*perimeter;
             }
             return sum;
         } catch (FileNotFoundException e) {
@@ -70,37 +71,52 @@ public class Day12Part1 {
         }
     }
 
-    private Group getGroup(int x, int y) {
+    private void recursiveFind(int x, int y, Set<String> mySet) {
         System.out.printf("(%d,%d)%n",x,y);
+        boolean completed = seen.contains(x+"-"+y);
+        if (completed) {
+            System.out.println("was seen: "+x+"-"+y);
+            return;
+        }
+        System.out.println("seen does not contain: "+ x+"-"+y);
         char currentChar = matrix.get(x).get(y);
+        seen.add(x+"-"+y);
 
-        for (int[] direction : directions) {
-            // System.out.println(direction);
-            int newX = x+direction[0];
-            int newY = y+direction[1];
-            // System.out.println(newX+"-"+newY);
+        for (int[] direction: directions) {
+            System.out.println("====");
+            // System.out.println("direction"+direction[0]+",,,"+direction[1]);
+            System.out.println("directions");
+            System.out.println(direction[0]);
+            System.out.println(direction[1]);
+            int newX = (int)x+direction[0];
+            int newY = (int)y+direction[1];
+            System.out.println("x & y");
+            System.out.println(x);
+            System.out.println(y);
+            System.out.println("newx & newy");
+            System.out.println(newX);
+            System.out.println(newY);
+            // System.out.println("newx newy"+newX+",,,"+newY);
 
             if (newX>=0&&newX<size&&newY>=0&&newY<size) {
+                System.out.println("newx newy"+newX+",,,"+newY);
+                System.out.println("inside grid");
                 char c = matrix.get(newX).get(newY);
                 if (currentChar==c) {
-                    Group group = myMap.get(newX + "-" + newY);
-                    if (group!=null) {
-                        System.out.println("found group"+newX+"-"+newY);
-                        myMap.put(x+"-"+y, group);
-                        return group;
-                    } 
+                    System.out.println(currentChar);
+                    System.out.println("add"+newX+"-"+newY);
+                    mySet.add(newX+"-"+newY);
+                    recursiveFind(newX, newY, mySet);
                 }
+                System.out.println("not same char");
+            } else {
+                System.out.println("out of grid");
+                continue;
             }
         }
-        System.out.println("new group");
-        Group newGroup = new Group();
-        myMap.put(x+"-"+y, newGroup);
-        groups.add(newGroup);
-        return newGroup;
     }
 
     private int getPerimeter(int x, int y) {
-        // System.out.printf("(%d,%d)%n",x,y);
         char currentChar = matrix.get(x).get(y);
         int perimeter = 4;
 
