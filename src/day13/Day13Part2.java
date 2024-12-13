@@ -8,7 +8,7 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Day13Part1 {
+public class Day13Part2 {
     public class Button {
         long x;
         long y;
@@ -87,32 +87,25 @@ public class Day13Part1 {
             }
             scanner.close();
 
-            int maxPresses = 100;
+            for (Machine machine : machines) {
+                machine.x += (long) 10000000000000L;
+                machine.y += (long) 10000000000000L;
+            }
+
             long result = 0;
 
             for (Machine machine : machines) {
-                machine.print();
                 Button buttonA = machine.buttons.get(0);
                 Button buttonB = machine.buttons.get(1);
-                long minPrizeTokens = 0;
-                boolean prizeFound = false;
 
-                for (int a = 0; a < maxPresses; a++) {
-                    for (int b = 0; b < maxPresses; b++) {
-                        long sumX = buttonA.x * a + buttonB.x * b;
-                        long sumY = buttonA.y * a + buttonB.y * b;
-                        if (sumX == machine.x && sumY == machine.y) {
-                            prizeFound = true;
-                            long tokens = buttonA.tokens * a + buttonB.tokens * b;
-                            if (tokens < minPrizeTokens || minPrizeTokens == 0) {
-                                minPrizeTokens = tokens;
-                            }
-                        }
-                    }
-                }
+                double timesB = ((machine.x * buttonA.y)
+                        - (machine.y * buttonA.x)) / ((buttonB.x * buttonA.y) - (buttonB.y * buttonA.x));
 
-                if (prizeFound) {
-                    result += minPrizeTokens;
+                double timesA1 = (machine.x - (timesB * buttonB.x)) / buttonA.x;
+                double timesA2 = (machine.y - (timesB * buttonB.y)) / buttonA.y;
+
+                if (timesA1 == timesA2 && timesB == Math.floor(timesB) && timesA1 == Math.floor(timesA1)) {
+                    result += buttonA.tokens * timesA1 + buttonB.tokens * timesB;
                 }
             }
 
