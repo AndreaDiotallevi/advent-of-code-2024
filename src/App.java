@@ -25,75 +25,13 @@
 // import day11.Day11Part1;
 // import day11.Day11Part2;
 // import day12.Day12Part1;
-import day12.Day12Part2;
+// import day12.Day12Part2;
+import day13.Day13Part1;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        // int result = new Day1().processFile();
-        // System.out.println(result);
-
-        // int result = new Day1Part2().processFile();
-        // System.out.println(result);
-
-        // int result = new Day2().processFile();
-        // System.out.println(result);
-
-        // int result = new Day2Part2().processFile();
-        // System.out.println(result);
-
-        // int result = new Day3().processFile();
-        // System.out.println(result);
-
-        // int result = new Day3Part2().processFile();
-        // System.out.println(result);
-
-        // int result = new Day4().processFile();
-        // System.out.println(result);
-
-        // int result = new Day4Part2().processFile();
-        // System.out.println(result);
-
-        // int result = new Day5().processFile();
-        // System.out.println(result);
-
-        // int result = new Day5Part2().processFile();
-        // System.out.println(result);
-
-        // int result = new Day6Part1().processFile();
-        // System.out.println(result);
-
-        // int result = new Day6Part2().processFile();
-        // System.out.println(result);
-
-        // long result = new Day7Part1().processFile();
-        // System.out.println(result);
-
-        // long result = new Day7Part2().processFile();
-        // System.out.println(result);
-
-        // long result = new Day8Part1().processFile();
-        // System.out.println(result);
-
-        // long result = new Day8Part2().processFile();
-        // System.out.println(result);
-
-        // long result = new Day9Part1().processFile();
-        // System.out.println(result);
-
-        // long result = new Day9Part2().processFile();
-        // System.out.println(result);
-
-        // int result = new Day10Part1().processFile();
-        // System.out.println(result);
-
-        // int result = new Day10Part2().processFile();
-        // System.out.println(result);
-
-        // long result = new Day11Part2().processFile();
-        // System.out.println(result);
-
         final long startTime = System.currentTimeMillis();
-        long result = new Day12Part2().processFile();
+        long result = new Day13Part1().processFile();
         System.out.println(result);
         final long endTime = System.currentTimeMillis();
         System.out.println("Total execution time: " + (endTime - startTime));
