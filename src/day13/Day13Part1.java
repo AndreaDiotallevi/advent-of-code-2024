@@ -12,12 +12,12 @@ public class Day13Part1 {
     public class Button {
         long x;
         long y;
-        long score;
+        long tokens;
 
-        public Button(long x, long y, long score) {
+        public Button(long x, long y, long tokens) {
             this.x = x;
             this.y = y;
-            this.score = score;
+            this.tokens = tokens;
         }
 
         @Override
@@ -25,7 +25,7 @@ public class Day13Part1 {
             return "Button{" +
                     "x=" + x +
                     ", y=" + y +
-                    ", score=" + score +
+                    ", tokens=" + tokens +
                     '}';
         }
     }
@@ -51,7 +51,7 @@ public class Day13Part1 {
 
     public long processFile() {
         try {
-            File file = new File("resources/day13test.txt");
+            File file = new File("resources/day13.txt");
             Scanner scanner = new Scanner(file);
 
             List<Button> buttons = new ArrayList<>();
@@ -85,14 +85,44 @@ public class Day13Part1 {
                 }
 
             }
+            scanner.close();
 
-            for (Machine m : machines) {
-                m.print();
+            int maxPresses = 100;
+            long result = 0;
+
+            for (Machine machine : machines) {
+                machine.print();
+                Button buttonA = machine.buttons.get(0);
+                Button buttonB = machine.buttons.get(1);
+                long minPrizeTokens = 0;
+                boolean prizeFound = false;
+
+                for (int a = 0; a < maxPresses; a++) {
+                    for (int b = 0; b < maxPresses; b++) {
+                        long sumX = buttonA.x * a + buttonB.x * b;
+                        long sumY = buttonA.y * a + buttonB.y * b;
+                        if (sumX == machine.x && sumY == machine.y) {
+                            System.out.printf("%d %d %n", a, b);
+                            prizeFound = true;
+                            long tokens = buttonA.tokens * a + buttonB.tokens * b;
+                            System.out.println(tokens);
+                            if (tokens < minPrizeTokens || minPrizeTokens == 0) {
+                                minPrizeTokens = tokens;
+                                System.out.println("here");
+                                System.out.println(minPrizeTokens);
+                            }
+                        }
+                    }
+                }
+
+                if (prizeFound) {
+                    System.out.println("found");
+                    System.out.println(minPrizeTokens);
+                    result += minPrizeTokens;
+                }
             }
 
-            scanner.close();
-            long sum = 0;
-            return sum;
+            return result;
         } catch (FileNotFoundException e) {
             return -1;
         }
