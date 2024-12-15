@@ -56,7 +56,6 @@ public class Day14Part1 {
                 }
             }
             scanner.close();
-            System.out.println(robots);
 
             for (Robot robot : robots) {
                 int x = (robot.location.x + robot.velocity.x * 100) % sizeX;
@@ -71,8 +70,6 @@ public class Day14Part1 {
                 robotsFinalPositions.put(point, robotsList);
             }
 
-            System.out.println(robotsFinalPositions);
-
             int quadrant1 = 0;
             int quadrant2 = 0;
             int quadrant3 = 0;
@@ -80,35 +77,22 @@ public class Day14Part1 {
 
             for (Map.Entry<Point, List<Robot>> entry : robotsFinalPositions.entrySet()) {
                 Point position = entry.getKey();
-                System.out.println(position);
                 List<Robot> robots = entry.getValue();
                 int count = robots.size();
 
                 if (position.x < sizeX / 2 && position.y < sizeY / 2) {
-                    System.out.println("111");
-                    System.out.println(count);
                     quadrant1 += count;
                 }
                 if (position.x < sizeX / 2 && position.y >= sizeY - sizeY / 2) {
-                    System.out.println("222");
-                    System.out.println(count);
                     quadrant2 += count;
                 }
                 if (position.x >= sizeX - sizeX / 2 && position.y < sizeY / 2) {
-                    System.out.println("333");
-                    System.out.println(count);
                     quadrant3 += count;
                 }
                 if (position.x >= sizeX - sizeX / 2 && position.y >= sizeY - sizeY / 2) {
-                    System.out.println("444");
-                    System.out.println(count);
                     quadrant4 += count;
                 }
             }
-            System.out.println(quadrant1);
-            System.out.println(quadrant2);
-            System.out.println(quadrant3);
-            System.out.println(quadrant4);
 
             return quadrant1 * quadrant2 * quadrant3 * quadrant4;
         } catch (FileNotFoundException e) {
