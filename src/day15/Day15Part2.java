@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +17,7 @@ public class Day15Part2 {
 
     public long processFile() {
         try {
-            File file = new File("resources/day15test2.txt");
+            File file = new File("resources/day15.txt");
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
@@ -54,40 +55,49 @@ public class Day15Part2 {
                 }
             }
             scanner.close();
-            for (int y = 0; y < warehouse.size(); y++) {
-                for (int x = 0; x < warehouse.get(0).size(); x++) {
-                    System.out.print(warehouse.get(y).get(x));
-                }
-                System.out.println();
-            }
-            System.out.println(robot);
+            // for (int y = 0; y < warehouse.size(); y++) {
+            // for (int x = 0; x < warehouse.get(0).size(); x++) {
+            // System.out.print(warehouse.get(y).get(x));
+            // }
+            // System.out.println();
+            // }
+            // System.out.println(robot);
+
+            // int counter = 0;
 
             for (char movement : movements) {
-                Map<Point, Character> swapMap = new HashMap<>();
-                swapMap.put(robot, '.');
+                // counter++;
+                // if (counter >= 7)
+                // break;
+
+                List<List<Point>> swapList = new ArrayList<>();
 
                 Point vector = getVector(movement);
                 if (vector.x == 0) {
-                    System.out.println("vertically");
-                    boolean canMove = checkVertically(robot, movement, swapMap);
-                    System.out.println(swapMap);
+                    // System.out.println("vertically");
+                    boolean canMove = checkVertically(robot, movement, swapList, 0);
+                    // System.out.println("can move");
+                    // System.out.println(swapList);
                     if (canMove) {
-                        System.out.println("can move vertically");
-                        moveCells(swapMap);
+                        // System.out.println("can move vertically");
+                        moveCells(swapList, vector);
+                        warehouse.get(robot.y).set(robot.x, '.');
+                        warehouse.get(robot.y + vector.y).set(robot.x + vector.x, '@');
                         robot.translate(vector.x, vector.y);
+
                     } else {
-                        System.out.println("cannot move vertically");
+                        // System.out.println("cannot move vertically");
                     }
                 } else {
-                    System.out.println("horizontally");
+                    // System.out.println("horizontally");
                     checkHorizontally(robot, movement);
                 }
 
                 for (int y = 0; y < warehouse.size(); y++) {
                     for (int x = 0; x < warehouse.get(0).size(); x++) {
-                        System.out.print(warehouse.get(y).get(x));
+                        // System.out.print(warehouse.get(y).get(x));
                     }
-                    System.out.println();
+                    // System.out.println();
                 }
             }
 
@@ -95,7 +105,7 @@ public class Day15Part2 {
 
             for (int x = 0; x < warehouse.get(0).size(); x++) {
                 for (int y = 0; y < warehouse.size(); y++) {
-                    if (warehouse.get(y).get(x) == 'O') {
+                    if (warehouse.get(y).get(x) == '[') {
                         sum += 100 * y + x;
                     }
                 }
@@ -120,42 +130,55 @@ public class Day15Part2 {
             throw new Error("Movement char is invalid");
     }
 
-    private boolean checkVertically(Point point, char movement, Map<Point, Character> swapMap) {
-        swapMap.put(point, '.');
-        System.out.println();
+    private boolean checkVertically(Point point, char movement, List<List<Point>> swapList, int depth) {
+        // System.out.println();
         char currentChar = warehouse.get(point.y).get(point.x);
-        System.out.println("current char=" + currentChar);
+        // System.out.println("current char=" + currentChar);
         Point vector = getVector(movement);
         Point nextPoint = new Point(point.x + vector.x, point.y + vector.y);
         char nextChar = warehouse.get(nextPoint.y).get(nextPoint.x);
-        System.out.println("next char=" + nextChar);
+        // System.out.println("next char=" + nextChar);
         if (nextChar == '#') {
             return false;
         }
         if (nextChar == '[') {
-            boolean response1 = checkVertically(nextPoint, movement, swapMap);
+            boolean response1 = checkVertically(nextPoint, movement, swapList, depth + 1);
             Point nextPointRight = new Point(nextPoint.x + 1, nextPoint.y);
-            boolean response2 = checkVertically(nextPointRight, movement, swapMap);
-            swapMap.put(nextPoint, currentChar);
-            if (currentChar == '@') {
-                Point robotRight = new Point(point.x + 1, point.y + vector.y);
-                swapMap.put(robotRight, '.');
+            boolean response2 = checkVertically(nextPointRight, movement, swapList, depth + 1);
+            if (swapList.size() <= depth) {
+                // Ensure the list has enough elements up to the 'depth' index
+                while (swapList.size() <= depth) {
+                    swapList.add(new ArrayList<>()); // Add empty lists
+                }
             }
+
+            // Now 'depth' is guaranteed to exist in the list
+            List<Point> points = swapList.get(depth);
+            points.add(nextPoint);
+            swapList.set(depth, points);
+            // System.out.println("swap list=" + swapList);
             return response1 && response2;
         }
         if (nextChar == ']') {
-            boolean response1 = checkVertically(nextPoint, movement, swapMap);
+            // System.out.println("HERERE");
+            boolean response1 = checkVertically(nextPoint, movement, swapList, depth + 1);
             Point nextPointLeft = new Point(nextPoint.x - 1, nextPoint.y);
-            boolean response2 = checkVertically(nextPointLeft, movement, swapMap);
-            swapMap.put(nextPoint, currentChar);
-            if (currentChar == '@') {
-                Point robotLeft = new Point(point.x - 1, point.y + vector.y);
-                swapMap.put(robotLeft, '.');
+            boolean response2 = checkVertically(nextPointLeft, movement, swapList, depth + 1);
+            if (swapList.size() <= depth) {
+                // Ensure the list has enough elements up to the 'depth' index
+                while (swapList.size() <= depth) {
+                    swapList.add(new ArrayList<>()); // Add empty lists
+                }
             }
+
+            // Now 'depth' is guaranteed to exist in the list
+            List<Point> points = swapList.get(depth);
+            points.add(nextPointLeft);
+            swapList.set(depth, points);
+            // System.out.println("swap list=" + swapList);
             return response1 && response2;
         }
         if (nextChar == '.') {
-            swapMap.put(nextPoint, currentChar);
             return true;
         }
         return true;
@@ -218,11 +241,15 @@ public class Day15Part2 {
         }
     }
 
-    private void moveCells(Map<Point, Character> myMap) {
-        for (Map.Entry<Point, Character> entry : myMap.entrySet()) {
-            Point point = entry.getKey();
-            Character c = entry.getValue();
-            warehouse.get(point.y).set(point.x, c);
+    private void moveCells(List<List<Point>> swapList, Point vector) {
+        for (int i = swapList.size() - 1; i >= 0; i--) {
+            List<Point> points = swapList.get(i);
+            for (Point point : points) {
+                warehouse.get(point.y + vector.y).set(point.x, '[');
+                warehouse.get(point.y).set(point.x, '.');
+                warehouse.get(point.y + vector.y).set(point.x + 1, ']');
+                warehouse.get(point.y).set(point.x + 1, '.');
+            }
         }
     }
 }

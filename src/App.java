@@ -36,10 +36,10 @@ import day15.Day15Part2;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        // final long startTime = System.currentTimeMillis();
+        final long startTime = System.currentTimeMillis();
         long result = new Day15Part2().processFile();
         System.out.println(result);
-        // final long endTime = System.currentTimeMillis();
-        // System.out.println("Total execution time: " + (endTime - startTime));
+        final long endTime = System.currentTimeMillis();
+        System.out.println("Total execution time: " + (endTime - startTime));
     }
 }
