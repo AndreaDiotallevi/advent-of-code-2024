@@ -11,17 +11,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Day14Part2 {
     public List<Robot> robots = new ArrayList<>();
-    int sizeX = 101;
-    int sizeY = 103;
-    // int sizeX = 5;
-    // int sizeY = 5;
-    List<Point> directions = new ArrayList<>(
-            Arrays.asList(new Point(0, 1), new Point(1, 0), new Point(0, -1), new Point(-1, 0)));
+    // int sizeX = 101;
+    // int sizeY = 103;
+    int sizeX = 11;
+    int sizeY = 7;
+    // List<Point> directions = new ArrayList<>(
+    // Arrays.asList(new Point(0, 1), new Point(1, 0), new Point(0, -1), new
+    // Point(-1, 0)));
 
     class Robot {
         Point location;
@@ -57,7 +59,7 @@ public class Day14Part2 {
 
     public long processFile() {
         try {
-            File file = new File("resources/day14.txt");
+            File file = new File("resources/day14test.txt");
             Scanner scanner = new Scanner(file);
             String regex = "p=(-?\\d+),(-?\\d+) v=(-?\\d+),(-?\\d+)";
             Pattern pattern = Pattern.compile(regex);
@@ -76,17 +78,16 @@ public class Day14Part2 {
                 }
             }
             scanner.close();
-            System.out.println("robots:");
-            System.out.println(robots);
-            System.out.println(" ");
+            // System.out.println("robots:");
+            // System.out.println(robots);
+            // System.out.println(" ");
 
             boolean exit = false;
             long seconds = 1;
 
             while (!exit) {
-                // System.out.println("seconds+" + seconds);
+                System.out.println("seconds+" + seconds);
                 Map<Point, List<Robot>> grid = new HashMap<Point, List<Robot>>();
-                Set<Robot> seen = new HashSet<Robot>();
                 for (Robot robot : robots) {
                     Point point = robot.move();
                     List<Robot> robotsAtPoint = grid.get(point);
@@ -95,30 +96,52 @@ public class Day14Part2 {
                     robotsAtPoint.add(robot);
                     grid.put(point, robotsAtPoint);
                 }
-                // System.out.println(grid);
-
-                find(grid, robots.get(0), seen);
-                // for (Robot robot : robots) {
-                // find(grid, robot, seen);
+                List<List<String>> newGrid = new ArrayList<>();
+                for (int x = 0; x < sizeX; x++) {
+                    List<String> row = new ArrayList<>();
+                    for (int y = 0; y < sizeY; y++) {
+                        row.add("");
+                    }
+                    newGrid.add(row);
+                }
+                for (int x = 0; x < sizeX; x++) {
+                    for (int y = 0; y < sizeY; y++) {
+                        List<Robot> robots = grid.get(new Point(x, y));
+                        if (robots != null) {
+                            newGrid.get(x).set(y, "O");
+                        }
+                    }
+                }
+                // for (int x = 0; x < sizeX; x++) {
+                // System.out.println(newGrid.get(x));
                 // }
-                if (seen.size() > 10)
-                    System.out.printf("seen=%d%n", seen.size());
-                // System.out.printf("robots-size=%d%n", robots.size());
-                if (seen.size() == robots.size()) {
+                // System.out.println(" ");
+
+                for (int x = 0; x < sizeX; x++) {
+                    // Assume newGrid.get(x) returns a list or array for a row
+                    List<String> row = newGrid.get(x); // Or whatever type newGrid contains
+
+                    for (int y = 0; y < row.size(); y++) {
+                        // Format each cell to be 2 characters wide (adjust as needed)
+                        System.out.printf("%-2s", row.get(y).isEmpty() ? "." : row.get(y));
+                    }
+                    System.out.println(); // Move to the next line after printing a row
+                }
+                System.out.println();
+
+                if (seconds == 100) {
                     exit = true;
                     break;
                 }
-                if (seen.size() == 221) {
-                    System.out.println(grid);
-                    exit = true;
-                }
-                seconds++;
-                // System.out.println(seconds);
-                // exit = true;
-                // if (seconds > 10) {
-                // exit = true;
-                // }
 
+                seconds++;
+                // try {
+                // TimeUnit.MILLISECONDS.sleep(500);
+                // ;
+                // } catch (InterruptedException e) {
+
+                // }
+                // exit = true;
             }
 
             return seconds;
@@ -126,28 +149,9 @@ public class Day14Part2 {
             return -1;
         }
     }
-
-    private void find(Map<Point, List<Robot>> grid, Robot robot, Set<Robot> seen) {
-        // System.out.println("visiting:");
-        // System.out.println(robot);
-        if (seen.contains(robot))
-            return;
-
-        seen.add(robot);
-        // System.out.println("adding:");
-        // System.out.println(seen);
-
-        for (Point direction : directions) {
-            Point searchPoint = new Point(robot.location.x + direction.x, robot.location.y + direction.y);
-            if (searchPoint.x < 0 || searchPoint.y < 0 || searchPoint.x > sizeX - 1 || searchPoint.y > sizeY - 1) {
-                return;
-            }
-            List<Robot> robots = grid.get(searchPoint);
-            if (robots == null)
-                return;
-            for (Robot searchRobot : robots) {
-                find(grid, searchRobot, seen);
-            }
-        }
-    }
 }
+
+// 30
+// 31
+// 32
+// 68
