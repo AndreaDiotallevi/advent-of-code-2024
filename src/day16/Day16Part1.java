@@ -4,13 +4,37 @@ import java.awt.Point;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
 public class Day16Part1 {
+    class Reindeer {
+        Point location;
+        Point direction;
+
+        public Reindeer(Point location, Point direction) {
+            this.location = location;
+            this.direction = direction;
+        }
+
+        @Override
+        public String toString() {
+            return "Reindeer{" +
+                    "location=" + location +
+                    ", direction=" + direction +
+                    '}';
+        }
+    }
+
     public List<List<Character>> maze = new ArrayList<>();
-    public Point reindeer;
+    public Reindeer reindeer;
     public Point target;
+    public List<Point> directions = new ArrayList<>(Arrays.asList(
+            new Point(0, 1),
+            new Point(1, 0),
+            new Point(0, -1),
+            new Point(-1, 0)));
 
     public long processFile() {
         try {
@@ -24,7 +48,7 @@ public class Day16Part1 {
                     char c = chars[i];
                     mazeRow.add(c);
                     if (c == 'S')
-                        reindeer = new Point(i, maze.size());
+                        reindeer = new Reindeer(new Point(i, maze.size()), new Point(-1, 0));
                     if (c == 'E')
                         target = new Point(i, maze.size());
                 }
@@ -38,6 +62,16 @@ public class Day16Part1 {
                 }
                 System.out.println();
             }
+
+            // for (List<Character> row : maze) {
+            // for (Character cell : row) {
+            // System.out.print(cell);
+            // }
+            // System.out.println();
+            // }
+
+            System.out.println(reindeer);
+            System.out.println(target);
 
             long sum = 0;
             return sum;
