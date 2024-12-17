@@ -27,8 +27,8 @@ public class Day16Part1mod {
         }
     }
 
-    public Point start;
-    public Point end;
+    public Node start;
+    public Node end;
     public Map<Point, Node> maze = new HashMap<>();
     public int mazeSize;
     public List<Point> directions = new ArrayList<>(Arrays.asList(
@@ -47,11 +47,13 @@ public class Day16Part1mod {
                 char[] chars = line.toCharArray();
                 for (int x = 0; x < chars.length; x++) {
                     char c = chars[x];
-                    maze.put(new Point(x, y), new Node(new Point(x, y), c));
+                    Point point = new Point(x, y);
+                    Node node = new Node(point, c);
+                    maze.put(point, node);
                     if (c == 'S')
-                        start = new Point(x, y);
+                        start = node;
                     if (c == 'E')
-                        end = new Point(x, y);
+                        end = node;
                 }
                 y++;
             }
@@ -64,7 +66,6 @@ public class Day16Part1mod {
     }
 
     public void printMaze() {
-        // System.out.println(mazeSize);
         for (int y = 0; y < mazeSize; y++) {
             for (int x = 0; x < mazeSize; x++) {
                 System.out.print(maze.get(new Point(x, y)).value);
@@ -73,9 +74,36 @@ public class Day16Part1mod {
         }
     }
 
+    public void buildGraph(Node currentNode, Set<Point> visited) {
+        if (visited.contains(currentNode.location)) {
+            return;
+        } else {
+            visited.add(currentNode.location);
+        }
+
+        if (currentNode.value == 'E') {
+            return;
+        }
+
+        for (Point direction : directions) {
+            Point nextPoint = new Point(currentNode.location.x + direction.x, currentNode.location.y + direction.y);
+            Node nextNode = maze.get(nextPoint);
+            if (nextNode.value == '#') {
+                continue;
+            }
+            currentNode.edges.add(nextNode);
+            buildGraph(nextNode, visited);
+        }
+    }
+
     public long processFile() {
         readInput();
+
         printMaze();
+
+        Set<Point> visited = new HashSet<>();
+        buildGraph(start, visited);
+
         return 0;
     }
 }
