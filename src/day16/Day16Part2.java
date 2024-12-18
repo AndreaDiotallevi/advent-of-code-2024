@@ -93,18 +93,6 @@ public class Day16Part2 {
 
             for (State adjacent : adjacentNodes) {
                 if (visitedWithCostFromStart.containsKey(adjacent)) {
-                    Integer adjacentCost = visitedWithCostFromStart.get(adjacent);
-                    if (cost > adjacentCost) {
-                        continue;
-                    }
-                    if (cost < adjacentCost) {
-                        adjacent.parents = new ArrayList<>();
-                        adjacent.parents.add(current);
-                        continue;
-                    }
-                    if (cost == adjacentCost) {
-                        adjacent.parents.add(current);
-                    }
                     continue;
                 } else {
                     visitedWithCostFromStart.put(current, adjacent.cost);
