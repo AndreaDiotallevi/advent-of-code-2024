@@ -73,7 +73,7 @@ public class Day16Part1 {
 
     public long processFile() {
         try {
-            File file = new File("resources/day16test3.txt");
+            File file = new File("resources/day16test.txt");
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
@@ -103,13 +103,16 @@ public class Day16Part1 {
             // long result = getMinimumScoreForPointWithDirection(reindeer, 0);
             // System.out.println(scoreMap);
 
-            // buildGraph(reindeer, new HashSet<>());
+            buildGraph(reindeer, new HashSet<>());
             // Node edge1 = reindeer.edges.get(0).node;
             // Node edge2 = reindeer.edges.get(1).node;
             // System.out.println(reindeer);
             // System.out.println(edge1);
             // System.out.println(edge2);
             // System.out.println(reindeer.edges.get(0));
+            Long minScore = null;
+            findShortestPath(reindeer, 0L, minScore);
+            System.out.println(minScore);
 
             long result = 0;
             return result;
@@ -119,16 +122,16 @@ public class Day16Part1 {
     }
 
     public void buildGraph(Node currentNode, Set<Node> visited) {
-        System.out.println("here");
+        // System.out.println("here");
         if (currentNode.location == target) {
             return;
         }
 
         if (visited.contains(currentNode)) {
-            System.out.println("visited");
+            // System.out.println("visited");
             return;
         } else {
-            System.out.println("not visited");
+            // System.out.println("not visited");
             visited.add(currentNode);
         }
 
@@ -158,6 +161,23 @@ public class Day16Part1 {
         Edge edge2 = new Edge(node2, 1000);
         currentNode.edges.add(edge2);
         buildGraph(node2, visited);
+    }
+
+    public void findShortestPath(Node node, Long score, Long minScore) {
+        System.out.println();
+        System.out.println(node);
+        System.out.println(node.edges);
+        if (node.location == target) {
+            System.out.println("here");
+            System.out.println(score);
+            if (minScore == null || score < minScore) {
+                minScore = score;
+                return;
+            }
+        }
+        for (Edge edge : node.edges) {
+            findShortestPath(edge.node, score + edge.weight, minScore);
+        }
     }
 
     // private long getMinimumScoreForPointWithDirection(Node

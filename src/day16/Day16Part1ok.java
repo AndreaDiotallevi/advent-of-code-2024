@@ -87,6 +87,10 @@ public class Day16Part1ok {
             this.direction = direction.turnLeft();
         }
 
+        public char getMazeValue() {
+            return maze.get(this.x).get(this.y);
+        }
+
         // Override equals to compare x, y, and direction
         @Override
         public boolean equals(Object obj) {
@@ -115,7 +119,7 @@ public class Day16Part1ok {
     }
 
     public Point target;
-    public Node reindeer;
+    public Node start;
     public List<List<Character>> maze = new ArrayList<>();
     // public Map<Node, Long> scoreMap = new HashMap<>();
 
@@ -131,7 +135,7 @@ public class Day16Part1ok {
                     char c = chars[i];
                     mazeRow.add(c);
                     if (c == 'S')
-                        reindeer = new Node(i, maze.size(), Node.Direction.LEFT);
+                        start = new Node(i, maze.size(), Node.Direction.LEFT);
                     if (c == 'E')
                         target = new Point(i, maze.size());
                 }
@@ -152,9 +156,18 @@ public class Day16Part1ok {
         }
     }
 
+    public void buildPathGraph(Node node, Set<Node> visited) {
+        if (node.getMazeValue() == 'E') {
+            return;
+        }
+        // Forward
+        // stepForward();
+    }
+
     public long processFile() {
         initialiseMaze();
         printMaze();
+        buildPathGraph(start, new HashSet<>());
         return 0;
     }
 }
