@@ -115,7 +115,7 @@ public class Day16Part2 {
 
     public static Long processFile() {
         try {
-            File file = new File("resources/day16test.txt");
+            File file = new File("resources/day16test3.txt");
             Scanner scanner = new Scanner(file);
 
             char[][] grid = parseMap(scanner);
@@ -138,7 +138,7 @@ public class Day16Part2 {
 
             for (int x = 0; x < grid.length; x++) {
                 for (int y = 0; y < grid[0].length; y++) {
-                    System.out.print(grid[y][x]);
+                    // System.out.print(grid[y][x]);
                 }
                 System.out.println();
             }
@@ -153,14 +153,15 @@ public class Day16Part2 {
             Set<String> uniqueCells = new HashSet<>();
 
             for (List<int[]> path : allPaths) {
-                // System.out.println();
+                System.out.println();
                 for (int[] coordinates : path) {
-                    // System.out.println(Arrays.toString(coordinates));
-                    String cellKey = coordinates[0] + "," + coordinates[1];
+                    System.out.println(Arrays.toString(coordinates));
+                    String cellKey = coordinates[0] + "--" + coordinates[1];
                     uniqueCells.add(cellKey);
                 }
-                // System.out.println();
+                System.out.println();
             }
+            System.out.println(uniqueCells);
             return (long) uniqueCells.size();
 
         } catch (FileNotFoundException e) {

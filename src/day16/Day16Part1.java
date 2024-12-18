@@ -40,6 +40,10 @@ public class Day16Part1 {
             int y = current.y;
             int direction = current.direction;
             int cost = current.cost;
+            System.out.println();
+            System.out.println("current=" + current.x + "-" + current.y);
+            System.out.println("direction=" + direction);
+            System.out.println("cost=" + cost);
 
             if (x == endX && y == endY) {
                 return cost;
@@ -92,7 +96,7 @@ public class Day16Part1 {
 
     public static Long processFile() {
         try {
-            File file = new File("resources/day16.txt");
+            File file = new File("resources/day16test3.txt");
             Scanner scanner = new Scanner(file);
 
             char[][] grid = parseMap(scanner);
@@ -115,7 +119,7 @@ public class Day16Part1 {
 
             for (int x = 0; x < grid.length; x++) {
                 for (int y = 0; y < grid[0].length; y++) {
-                    System.out.print(grid[y][x]);
+                    System.out.print(grid[x][y]);
                 }
                 System.out.println();
             }
