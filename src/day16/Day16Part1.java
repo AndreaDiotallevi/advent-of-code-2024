@@ -40,10 +40,6 @@ public class Day16Part1 {
             int y = current.y;
             int direction = current.direction;
             int cost = current.cost;
-            System.out.println();
-            System.out.println("current=" + current.x + "-" + current.y);
-            System.out.println("direction=" + direction);
-            System.out.println("cost=" + cost);
 
             if (x == endX && y == endY) {
                 return cost;
@@ -123,10 +119,6 @@ public class Day16Part1 {
                 }
                 System.out.println();
             }
-            // System.out.println(startX);
-            // System.out.println(startY);
-            // System.out.println(endX);
-            // System.out.println(endY);
 
             if (startX == -1 || endX == -1) {
                 System.out.println("Start (S) or end (E) point not found.");

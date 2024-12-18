@@ -15,29 +15,45 @@ public class Day16Part2 {
 
     public static class State implements Comparable<State> {
         int x, y, direction, cost;
-        State parent;
+        List<State> parents;
 
-        public State(int x, int y, int direction, int cost, State parent) {
+        public State(int x, int y, int direction, int cost) {
             this.x = x;
             this.y = y;
             this.direction = direction;
             this.cost = cost;
-            this.parent = parent;
+            this.parents = new ArrayList<>();
         }
 
         @Override
         public int compareTo(State other) {
             return Integer.compare(this.cost, other.cost);
         }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(x, y, direction);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (obj == null || getClass() != obj.getClass())
+                return false;
+            State state = (State) obj;
+            return x == state.x && y == state.y && direction == state.direction;
+        }
     }
 
-    public static List<List<int[]>> shortestPaths(char[][] grid, int startX, int startY, int startDirection, int endX,
-            int endY) {
+    public static int shortestPath(char[][] grid, int startX, int startY, int startDirection, int endX, int endY) {
         PriorityQueue<State> pq = new PriorityQueue<>();
-        pq.add(new State(startX, startY, startDirection, 0, null));
-        Set<String> visited = new HashSet<>();
-        Map<String, Integer> distance = new HashMap<>();
-        List<List<int[]>> allPaths = new ArrayList<>();
+        State startingState = new State(startX, startY, startDirection, 0);
+        pq.add(startingState);
+        Map<State, Integer> visitedWithCostFromStart = new HashMap<>();
+        visitedWithCostFromStart.put(startingState, 0);
+        List<State> finalStates = new ArrayList<>();
+        int shortestCost = Integer.MAX_VALUE;
 
         while (!pq.isEmpty()) {
             State current = pq.poll();
@@ -46,48 +62,79 @@ public class Day16Part2 {
             int direction = current.direction;
             int cost = current.cost;
 
+            if (cost > shortestCost)
+                break;
+
             if (x == endX && y == endY) {
-                allPaths.add(reconstructPath(current));
+                if (cost < shortestCost) {
+                    shortestCost = cost;
+                    finalStates.clear();
+                }
+                finalStates.add(current);
                 continue;
             }
 
-            String stateKey = x + "," + y + "," + direction;
-            if (visited.contains(stateKey)) {
-                continue;
-            }
-            visited.add(stateKey);
+            List<State> adjacentNodes = new ArrayList<>();
 
             int newX = x + DIRECTIONS[direction][0];
             int newY = y + DIRECTIONS[direction][1];
             if (isValid(grid, newX, newY)) {
-                int newCost = cost + 1;
-                String newStateKey = newX + "," + newY + "," + direction;
-                if (!distance.containsKey(newStateKey) || newCost < distance.get(newStateKey)) {
-                    pq.add(new State(newX, newY, direction, newCost, current));
-                    distance.put(newStateKey, newCost);
-                }
+                State newStateForward = new State(newX, newY, direction, cost + 1);
+                adjacentNodes.add(newStateForward);
             }
 
             int leftDirection = (direction + 3) % 4;
-            pq.add(new State(x, y, leftDirection, cost + 1000, current));
+            State newStateLeft = new State(x, y, leftDirection, cost + 1000);
+            adjacentNodes.add(newStateLeft);
 
             int rightDirection = (direction + 1) % 4;
-            pq.add(new State(x, y, rightDirection, cost + 1000, current));
+            State newStateRight = new State(x, y, rightDirection, cost + 1000);
+            adjacentNodes.add(newStateRight);
+
+            for (State adjacent : adjacentNodes) {
+                if (visitedWithCostFromStart.containsKey(adjacent)) {
+                    Integer adjacentCost = visitedWithCostFromStart.get(adjacent);
+                    if (cost > adjacentCost) {
+                        continue;
+                    }
+                    if (cost < adjacentCost) {
+                        adjacent.parents = new ArrayList<>();
+                        adjacent.parents.add(current);
+                        continue;
+                    }
+                    if (cost == adjacentCost) {
+                        adjacent.parents.add(current);
+                    }
+                    continue;
+                } else {
+                    visitedWithCostFromStart.put(current, adjacent.cost);
+                    pq.add(adjacent);
+                    adjacent.parents.add(current);
+                }
+            }
         }
 
-        return allPaths;
+        Set<List<Integer>> mergedSet = new HashSet<>();
+        for (State finalState : finalStates) {
+            Set<List<Integer>> mySet = reconstructPath(finalState, new HashSet<>());
+            mergedSet.addAll(mySet);
+        }
+
+        return mergedSet.size();
     }
 
-    public static List<int[]> reconstructPath(State endState) {
-        List<int[]> path = new ArrayList<>();
-        State current = endState;
-
-        while (current != null) {
-            path.add(new int[] { current.x, current.y });
-            current = current.parent;
+    public static Set<List<Integer>> reconstructPath(State state, Set<List<Integer>> cells) {
+        cells.add(Arrays.asList(state.x, state.y));
+        if (state.parents.isEmpty()) {
+            return cells;
         }
 
-        return path;
+        for (State parent : state.parents) {
+            cells.add(Arrays.asList(parent.x, parent.y));
+            reconstructPath(parent, cells);
+        }
+
+        return cells;
     }
 
     private static boolean isValid(char[][] grid, int x, int y) {
@@ -115,7 +162,7 @@ public class Day16Part2 {
 
     public static Long processFile() {
         try {
-            File file = new File("resources/day16test3.txt");
+            File file = new File("resources/day16.txt");
             Scanner scanner = new Scanner(file);
 
             char[][] grid = parseMap(scanner);
@@ -138,7 +185,7 @@ public class Day16Part2 {
 
             for (int x = 0; x < grid.length; x++) {
                 for (int y = 0; y < grid[0].length; y++) {
-                    // System.out.print(grid[y][x]);
+                    System.out.print(grid[x][y]);
                 }
                 System.out.println();
             }
@@ -148,21 +195,8 @@ public class Day16Part2 {
                 return -1L;
             }
 
-            List<List<int[]>> allPaths = shortestPaths(grid, startX, startY, startDirection, endX, endY);
-            System.out.println(allPaths.size());
-            Set<String> uniqueCells = new HashSet<>();
-
-            for (List<int[]> path : allPaths) {
-                System.out.println();
-                for (int[] coordinates : path) {
-                    System.out.println(Arrays.toString(coordinates));
-                    String cellKey = coordinates[0] + "--" + coordinates[1];
-                    uniqueCells.add(cellKey);
-                }
-                System.out.println();
-            }
-            System.out.println(uniqueCells);
-            return (long) uniqueCells.size();
+            long result = shortestPath(grid, startX, startY, startDirection, endX, endY);
+            return result;
 
         } catch (FileNotFoundException e) {
             return -1L;
