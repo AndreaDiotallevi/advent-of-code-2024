@@ -1,12 +1,17 @@
 package day17;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Day17Part2recursive {
     public static Map<String, String> myMap = new HashMap<>();
 
-    public static List<Integer> program = new ArrayList<>(Arrays.asList(2, 4, 1, 6, 7, 5, 4, 4,
-            1, 7, 0, 3, 5, 5, 3, 0));
+    public static List<Integer> program = new ArrayList<>(
+            Arrays.asList(2, 4, 1, 6, 7, 5, 4, 4, 1, 7, 0, 3, 5, 5, 3, 0));
+
+    public static String programString = program.stream()
+            .map(String::valueOf)
+            .collect(Collectors.joining(","));
 
     static class Computer {
         Long registerA;
@@ -60,7 +65,7 @@ public class Day17Part2recursive {
                     } else {
                         this.output += "," + String.valueOf(result5A);
                     }
-                    System.out.println(result5A);
+                    // System.out.println(result5A);
                     break;
                 case 6:
                     double result6A = registerA / (Math.pow(2, comboOperand));
@@ -93,39 +98,66 @@ public class Day17Part2recursive {
                 return registerC;
 
             return (long) literalOperand;
-
-            // throw new Error("combo operand error with " + literalOperand);
         }
     }
 
-    public static String processFile() {
-        // List<Integer> program = new ArrayList<>(Arrays.asList(2, 4, 1, 6, 7, 5, 4, 4,
-        // 1, 7, 0, 3, 5, 5, 3, 0));
+    public static Long processFile() {
+        Long num = 35184372088832L;
+        // Long num = 0L;
+        boolean exit = false;
 
-        // Computer computer = new Computer(37293246L, 0L, 0L, program);
+        while (!exit) {
+            num++;
+            // System.out.println(num);
+            String result = recursive(num, 0L, 0L, 0, "");
+            if (programString.equals(result)) {
+                System.out.println("TRUE");
+                exit = true;
+                break;
+            }
+            // if (num == 1835L) {
+            // break;
+            // }
+            // if (num == 117440L) {
+            // break;
+            // }
+            // if (!programString.startsWith(result)) {
+            // continue;
+            // }
+        }
 
-        // Integer instructionPointer = 0;
-        // while (instructionPointer < program.size() - 1) {
-        // Integer opcode = program.get(instructionPointer);
-        // Integer operand = program.get(instructionPointer + 1);
-        // computer.runInstruction(opcode, operand);
-        // instructionPointer = computer.instructionPointer;
-        // }
-        // return computer.output;
-        String result = recursive(37293246L, 0L, 0L, 0, "");
-        System.out.println(result);
-        return result;
+        System.out.println(num);
+        return num;
+
+        // String result = recursive(117440L, 0L, 0L, 0, "");
+        // System.out.println(result);
+        // System.out.println(programString.equals(result));
+        // return 0L;
     }
 
     public static String recursive(Long registerA, Long registerB, Long registerC, Integer instructionPointer,
             String output) {
+
         if (instructionPointer >= program.size() - 1) {
             return output;
         }
+        // System.out.println(output);
+        // if (output.length() > 2) {
+        // System.out.println("before");
+        // System.out.println(output);
+        // }
+
+        // if (!programString.endsWith(output)) {
+        // System.out.println(output);
+        // return "NOT";
+        // }
 
         String mapKey = registerA + "-" + registerB + "-" + registerC + "-" + instructionPointer;
 
         if (myMap.containsKey(mapKey)) {
+            // System.out.println("in map");
+            // System.out.println(mapKey);
+            // System.out.println(myMap.get(mapKey));
             if (output.isEmpty()) {
                 return myMap.get(mapKey);
             } else {
@@ -136,9 +168,16 @@ public class Day17Part2recursive {
             Integer opcode = program.get(instructionPointer);
             Integer operand = program.get(instructionPointer + 1);
             computer.runInstruction(opcode, operand);
-            myMap.put(mapKey, output);
-            return recursive(computer.registerA, computer.registerB, computer.registerC, computer.instructionPointer,
+            String result = recursive(computer.registerA, computer.registerB, computer.registerC,
+                    computer.instructionPointer,
                     computer.output);
+
+            // System.out.println("after");
+            // System.out.println(result);
+            // System.out.println(programString.endsWith(result));
+
+            myMap.put(mapKey, result);
+            return result;
         }
     }
 }
