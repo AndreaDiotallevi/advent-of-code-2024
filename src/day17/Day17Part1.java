@@ -124,17 +124,19 @@ public class Day17Part1 {
             if (literalOperand == 6)
                 return registerC;
 
-            // return (long) literalOperand;
+            return (long) literalOperand;
 
-            throw new Error("combo operand error with " + literalOperand);
+            // throw new Error("combo operand error with " + literalOperand);
         }
     }
 
     public static String processFile() {
-        List<Integer> program = new ArrayList<>(Arrays.asList(2, 4, 1, 6, 7, 5, 4, 4, 1, 7, 0, 3, 5, 5, 3, 0));
-        Computer computer = new Computer(37293246L, 0L, 0L, program);
+        List<Integer> program = new ArrayList<>(Arrays.asList(0, 1, 5, 4, 3, 0));
+        Computer computer = new Computer(729L, 0L, 0L, program);
+        // List<Integer> program = new ArrayList<>(Arrays.asList(2, 4, 1, 6, 7, 5, 4, 4,
+        // 1, 7, 0, 3, 5, 5, 3, 0));
+        // Computer computer = new Computer(37293246L, 0L, 0L, program);
         Integer instructionPointer = 0;
-        int i = 0;
         while (instructionPointer < program.size() - 1) {
             Integer opcode = program.get(instructionPointer);
             Integer operand = program.get(instructionPointer + 1);
@@ -147,10 +149,6 @@ public class Day17Part1 {
             System.out.println("registerB=" + computer.registerB);
             System.out.println("registerB=" + computer.registerC);
             instructionPointer = computer.instructionPointer;
-            i++;
-            // if (i > 4)
-            // break;
-            // break;
         }
         return computer.output;
     }
