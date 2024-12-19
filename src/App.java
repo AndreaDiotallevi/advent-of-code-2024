@@ -35,12 +35,13 @@
 // import day15.Day15Part2;
 // import day16.Day16Part1;
 // import day16.Day16Part1;
-import day16.Day16Part2;
+// import day16.Day16Part2;
+import day17.Day17Part1;
 
 public class App {
     public static void main(String[] args) throws Exception {
         // final long startTime = System.currentTimeMillis();
-        long result = Day16Part2.processFile();
+        String result = Day17Part1.processFile();
         System.out.println(result);
         // final long endTime = System.currentTimeMillis();
         // System.out.println("Total execution time: " + (endTime - startTime));
