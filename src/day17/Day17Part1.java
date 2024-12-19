@@ -32,32 +32,30 @@ public class Day17Part1 {
                     break;
                 case 1:
                     long result1A = registerB ^ literalOperand;
-                    registerB = result1A;
+                    this.registerB = result1A;
                     break;
                 case 2:
                     long result2A = comboOperand % 8;
-                    registerB = result2A;
+                    this.registerB = result2A;
                     break;
                 case 3:
-                    System.out.println(registerA);
                     if (registerA == 0L) {
-                        System.out.println("VVVVVVVV");
                         break;
                     }
                     this.instructionPointer = literalOperand;
-                    System.out.println("pointer changed to=" + literalOperand);
+                    // System.out.println("pointer changed to=" + literalOperand);
                     jumpIndex = 0;
                     break;
                 case 4:
                     long result4A = registerB ^ registerC;
-                    registerB = result4A;
+                    this.registerB = result4A;
                     break;
                 case 5:
                     long result5A = comboOperand % 8;
                     if (this.output.isEmpty()) {
                         this.output = String.valueOf(result5A);
                     } else {
-                        this.output += "," + result5A;
+                        this.output += "," + String.valueOf(result5A);
                     }
                     System.out.println(result5A);
                     break;
@@ -104,18 +102,22 @@ public class Day17Part1 {
         List<Integer> program = new ArrayList<>(Arrays.asList(2, 4, 1, 6, 7, 5, 4, 4,
                 1, 7, 0, 3, 5, 5, 3, 0));
         Computer computer = new Computer(37293246L, 0L, 0L, program);
+
+        // List<Integer> program = new ArrayList<>(Arrays.asList(2, 6));
+        // Computer computer = new Computer(10L, 29L, 9L, program);
+
         Integer instructionPointer = 0;
         while (instructionPointer < program.size() - 1) {
             Integer opcode = program.get(instructionPointer);
             Integer operand = program.get(instructionPointer + 1);
-            System.out.println();
-            System.out.println("pointer=" + instructionPointer);
-            System.out.println("opcode=" + opcode);
-            System.out.println("operand=" + operand);
+            // System.out.println();
+            // System.out.println("pointer=" + instructionPointer);
+            // System.out.println("opcode=" + opcode);
+            // System.out.println("operand=" + operand);
             computer.runInstruction(opcode, operand);
-            System.out.println("registerA=" + computer.registerA);
-            System.out.println("registerB=" + computer.registerB);
-            System.out.println("registerB=" + computer.registerC);
+            // System.out.println("registerA=" + computer.registerA);
+            // System.out.println("registerB=" + computer.registerB);
+            // System.out.println("registerB=" + computer.registerC);
             instructionPointer = computer.instructionPointer;
         }
         return computer.output;
