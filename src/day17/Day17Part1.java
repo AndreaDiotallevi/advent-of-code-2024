@@ -3,39 +3,6 @@ package day17;
 import java.util.*;
 
 public class Day17Part1 {
-    // enum Register {
-    // A,
-    // B,
-    // C
-    // }
-
-    // class Instruction {
-    // Integer opcode;
-    // Integer literalOperand;
-    // Integer comboOperand;
-    // Register replaceValueOfWhichRegister;
-    // String output;
-    // Integer newInstructionPointer;
-
-    // public Instruction(Integer opcode) {
-    // this.opcode = opcode;
-    // this.literalOperand = opcode;
-    // }
-
-    // public void run() {
-    // switch (opcode) {
-    // case 0:
-    // // code block
-    // break;
-    // case 1:
-    // // code block
-    // break;
-    // default:
-    // // code block
-    // }
-    // }
-    // }
-
     static class Computer {
         List<Integer> program;
         Long registerA;
@@ -131,11 +98,12 @@ public class Day17Part1 {
     }
 
     public static String processFile() {
-        List<Integer> program = new ArrayList<>(Arrays.asList(0, 1, 5, 4, 3, 0));
-        Computer computer = new Computer(729L, 0L, 0L, program);
-        // List<Integer> program = new ArrayList<>(Arrays.asList(2, 4, 1, 6, 7, 5, 4, 4,
-        // 1, 7, 0, 3, 5, 5, 3, 0));
-        // Computer computer = new Computer(37293246L, 0L, 0L, program);
+        // List<Integer> program = new ArrayList<>(Arrays.asList(0, 1, 5, 4, 3, 0));
+        // Computer computer = new Computer(729L, 0L, 0L, program);
+
+        List<Integer> program = new ArrayList<>(Arrays.asList(2, 4, 1, 6, 7, 5, 4, 4,
+                1, 7, 0, 3, 5, 5, 3, 0));
+        Computer computer = new Computer(37293246L, 0L, 0L, program);
         Integer instructionPointer = 0;
         while (instructionPointer < program.size() - 1) {
             Integer opcode = program.get(instructionPointer);
