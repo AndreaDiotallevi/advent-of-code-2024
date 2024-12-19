@@ -61,17 +61,17 @@ public class Day17Part1 {
                     break;
                 case 6:
                     double result6A = registerA / (Math.pow(2, comboOperand));
-                    long result6B = (long) Math.floor(result6A + 0.5d);
+                    long result6B = (long) Math.floor(result6A);
                     this.registerB = result6B;
                     break;
                 case 7:
                     double result7A = registerA / (Math.pow(2, comboOperand));
-                    long result7B = (long) Math.floor(result7A + 0.5d);
+                    long result7B = (long) Math.floor(result7A);
                     this.registerC = result7B;
                     break;
 
                 default:
-                    break;
+                    throw new Error("opcode out of range = " + opcode);
             }
             this.instructionPointer += jumpIndex;
         }
