@@ -31,79 +31,75 @@ public class Day19Part1 {
         }
     }
 
-    public static void generate(String input) {
+    // public static List<List<String>> generateCombinations(String input) {
+    // List<String> result = new ArrayList<>();
+    // int n = input.length();
 
-    }
+    // int totalCombinations = 1 << (n - 1);
 
-    public static List<List<String>> generateCombinations(String input) {
-        List<String> result = new ArrayList<>();
-        int n = input.length();
+    // for (int i = 0; i < totalCombinations; i++) {
+    // StringBuilder strings = new StringBuilder();
 
-        int totalCombinations = 1 << (n - 1);
+    // for (int j = 0; j < n; j++) {
+    // // System.out.println(i + "-" + j);
+    // strings.append(input.charAt(j));
+    // if (j < n - 1 && ((i & (1 << j)) != 0)) {
+    // strings.append('|');
+    // }
+    // }
+    // if (strings.length() <= 8) {
+    // result.add(strings.toString());
+    // }
 
-        for (int i = 0; i < totalCombinations; i++) {
-            StringBuilder strings = new StringBuilder();
+    // result.add(strings.toString());
+    // }
 
-            for (int j = 0; j < n; j++) {
-                // System.out.println(i + "-" + j);
-                strings.append(input.charAt(j));
-                if (j < n - 1 && ((i & (1 << j)) != 0)) {
-                    strings.append('|');
-                }
-            }
-            if (strings.length() <= 8) {
-                result.add(strings.toString());
-            }
+    // List<List<String>> combinations = new ArrayList<>();
 
-            result.add(strings.toString());
-        }
+    // for (String part : result) {
+    // List<String> sublist = Arrays.asList(part.split("\\|"));
+    // combinations.add(sublist);
+    // }
 
-        List<List<String>> combinations = new ArrayList<>();
+    // return combinations;
+    // }
 
-        for (String part : result) {
-            List<String> sublist = Arrays.asList(part.split("\\|"));
-            combinations.add(sublist);
-        }
+    // public static boolean isDesignPossible(String design) {
+    // if (validPatternsSet.contains(design)) {
+    // return true;
+    // }
+    // if (invalidPatternsSet.contains(design)) {
+    // return false;
+    // }
+    // if (design.length() == 1) {
+    // return false;
+    // }
 
-        return combinations;
-    }
+    // List<List<String>> combinations = generateCombinations(design);
+    // // System.out.println(combinations);
+    // boolean result = false;
 
-    public static boolean isDesignPossible(String design) {
-        if (validPatternsSet.contains(design)) {
-            return true;
-        }
-        if (invalidPatternsSet.contains(design)) {
-            return false;
-        }
-        if (design.length() == 1) {
-            return false;
-        }
+    // for (List<String> strings : combinations) {
+    // if (strings.size() == 1)
+    // continue;
+    // boolean combinationResult = true;
+    // for (String str : strings) {
+    // boolean strResult = isDesignPossible(str);
+    // if (strResult) {
+    // validPatternsSet.add(str);
+    // } else {
+    // invalidPatternsSet.add(str);
+    // }
+    // combinationResult = combinationResult && strResult;
+    // }
+    // if (combinationResult == true) {
+    // result = true;
+    // break;
+    // }
+    // }
 
-        List<List<String>> combinations = generateCombinations(design);
-        // System.out.println(combinations);
-        boolean result = false;
-
-        for (List<String> strings : combinations) {
-            if (strings.size() == 1)
-                continue;
-            boolean combinationResult = true;
-            for (String str : strings) {
-                boolean strResult = isDesignPossible(str);
-                if (strResult) {
-                    validPatternsSet.add(str);
-                } else {
-                    invalidPatternsSet.add(str);
-                }
-                combinationResult = combinationResult && strResult;
-            }
-            if (combinationResult == true) {
-                result = true;
-                break;
-            }
-        }
-
-        return result;
-    }
+    // return result;
+    // }
 
     public static boolean valid(String str) {
         if (validPatternsSet.contains(str)) {
