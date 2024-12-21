@@ -10,7 +10,7 @@ public class Day19Part1 {
 
     public static void readInput() {
         try {
-            File file = new File("resources/day19test.txt");
+            File file = new File("resources/day19.txt");
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
@@ -31,6 +31,10 @@ public class Day19Part1 {
         }
     }
 
+    public static void generate(String input) {
+
+    }
+
     public static List<List<String>> generateCombinations(String input) {
         List<String> result = new ArrayList<>();
         int n = input.length();
@@ -41,7 +45,7 @@ public class Day19Part1 {
             StringBuilder strings = new StringBuilder();
 
             for (int j = 0; j < n; j++) {
-                System.out.println(i + "-" + j);
+                // System.out.println(i + "-" + j);
                 strings.append(input.charAt(j));
                 if (j < n - 1 && ((i & (1 << j)) != 0)) {
                     strings.append('|');
@@ -76,7 +80,7 @@ public class Day19Part1 {
         }
 
         List<List<String>> combinations = generateCombinations(design);
-        System.out.println(combinations);
+        // System.out.println(combinations);
         boolean result = false;
 
         for (List<String> strings : combinations) {
@@ -101,16 +105,43 @@ public class Day19Part1 {
         return result;
     }
 
+    public static boolean valid(String str) {
+        if (validPatternsSet.contains(str)) {
+            return true;
+        }
+        if (invalidPatternsSet.contains(str)) {
+            return false;
+        }
+        if (str.length() == 1) {
+            return false;
+        }
+
+        for (String pattern : validPatternsSet) {
+            if (str.startsWith(pattern)) {
+                String subString = str.substring(pattern.length(), str.length());
+                boolean r = valid(subString);
+                if (r) {
+                    validPatternsSet.add(subString);
+                    return true;
+                } else {
+                    invalidPatternsSet.add(subString);
+                }
+            }
+        }
+
+        return false;
+    }
+
     public static void run() {
         readInput();
 
         int count = 0;
         for (String design : designs) {
-            System.out.println();
             System.out.println(design);
-            if (isDesignPossible(design)) {
+            if (valid(design)) {
                 validPatternsSet.add(design);
                 count++;
+                System.out.println(count);
             } else {
                 invalidPatternsSet.add(design);
             }

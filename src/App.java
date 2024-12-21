@@ -1,4 +1,5 @@
 import day19.Day19Part1;
+import day19.Day19Part1b;
 
 public class App {
     public static void main(String[] args) throws Exception {
