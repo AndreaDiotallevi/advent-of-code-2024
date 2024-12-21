@@ -7,7 +7,7 @@ public class Day17Part2recursive {
     public static Map<String, String> myMap = new HashMap<>();
 
     public static List<Integer> program = new ArrayList<>(
-            Arrays.asList(2, 4, 1, 6, 7, 5, 4, 4, 1, 7, 0, 3, 5, 5, 3, 0));
+            Arrays.asList(0, 3, 5, 4, 3, 0));
 
     public static String programString = program.stream()
             .map(String::valueOf)
@@ -107,7 +107,7 @@ public class Day17Part2recursive {
         boolean exit = false;
 
         while (!exit) {
-            num++;
+            num = num * 8;
             // System.out.println(num);
             String result = recursive(num, 0L, 0L, 0, "");
             if (programString.equals(result)) {
