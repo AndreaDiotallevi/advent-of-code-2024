@@ -39,10 +39,10 @@ public class Day17Part2 {
         initialSolutions.add(0L);
 
         List<Integer> program = new ArrayList<>(Arrays.asList(2, 4, 1, 6, 7, 5, 4, 4, 1, 7, 0, 3, 5, 5, 3, 0));
-        List<Integer> reversedMachineCode = new ArrayList<>(program);
-        java.util.Collections.reverse(reversedMachineCode);
+        List<Integer> reversedProgram = new ArrayList<>(program);
+        java.util.Collections.reverse(reversedProgram);
 
-        List<Long> allSolutions = part2(reversedMachineCode, initialSolutions);
+        List<Long> allSolutions = part2(reversedProgram, initialSolutions);
         System.out.println(allSolutions);
     }
 }
