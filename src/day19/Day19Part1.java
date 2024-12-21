@@ -4,12 +4,13 @@ import java.io.*;
 import java.util.*;
 
 public class Day19Part1 {
-    public static Set<String> patternsSet = new HashSet<>();
+    public static Set<String> validPatternsSet = new HashSet<>();
+    public static Set<String> invalidPatternsSet = new HashSet<>();
     public static List<String> designs = new ArrayList<>();
 
     public static void readInput() {
         try {
-            File file = new File("resources/day19.txt");
+            File file = new File("resources/day19test.txt");
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
@@ -17,7 +18,7 @@ public class Day19Part1 {
                     break;
                 String[] lineArray = line.split(", ");
                 for (String pattern : lineArray) {
-                    patternsSet.add(pattern);
+                    validPatternsSet.add(pattern);
                 }
             }
             while (scanner.hasNextLine()) {
@@ -40,10 +41,14 @@ public class Day19Part1 {
             StringBuilder strings = new StringBuilder();
 
             for (int j = 0; j < n; j++) {
+                System.out.println(i + "-" + j);
                 strings.append(input.charAt(j));
                 if (j < n - 1 && ((i & (1 << j)) != 0)) {
                     strings.append('|');
                 }
+            }
+            if (strings.length() <= 8) {
+                result.add(strings.toString());
             }
 
             result.add(strings.toString());
@@ -60,8 +65,11 @@ public class Day19Part1 {
     }
 
     public static boolean isDesignPossible(String design) {
-        if (patternsSet.contains(design)) {
+        if (validPatternsSet.contains(design)) {
             return true;
+        }
+        if (invalidPatternsSet.contains(design)) {
+            return false;
         }
         if (design.length() == 1) {
             return false;
@@ -76,7 +84,13 @@ public class Day19Part1 {
                 continue;
             boolean combinationResult = true;
             for (String str : strings) {
-                combinationResult = combinationResult && isDesignPossible(str);
+                boolean strResult = isDesignPossible(str);
+                if (strResult) {
+                    validPatternsSet.add(str);
+                } else {
+                    invalidPatternsSet.add(str);
+                }
+                combinationResult = combinationResult && strResult;
             }
             if (combinationResult == true) {
                 result = true;
@@ -89,18 +103,19 @@ public class Day19Part1 {
 
     public static void run() {
         readInput();
-        // System.out.println(patternsSet);
-        // System.out.println(designs);
-        // boolean result = isDesignPossible("brb");
-        // System.out.println(result);
+
         int count = 0;
         for (String design : designs) {
+            System.out.println();
+            System.out.println(design);
             if (isDesignPossible(design)) {
-                patternsSet.add(design);
+                validPatternsSet.add(design);
                 count++;
-
+            } else {
+                invalidPatternsSet.add(design);
             }
         }
+
         System.out.println(count);
     }
 }
