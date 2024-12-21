@@ -7,6 +7,7 @@ public class Day18Part1b {
     public static List<List<Integer>> memory = new ArrayList<>();
     public static List<List<Integer>> fallingBytes = new ArrayList<>();
     public static int memorySize = 7;
+    public static int bytesCount = 12;
 
     public static void readInput() {
         try {
@@ -42,7 +43,7 @@ public class Day18Part1b {
             memory.add(row);
         }
 
-        for (int time = 0; time < fallingBytes.size(); time++) {
+        for (int time = 0; time < bytesCount; time++) {
             List<Integer> fallingByte = fallingBytes.get(time);
             int row = fallingByte.get(0);
             int col = fallingByte.get(1);
