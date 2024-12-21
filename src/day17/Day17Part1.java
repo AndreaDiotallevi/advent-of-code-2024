@@ -43,7 +43,6 @@ public class Day17Part1 {
                         break;
                     }
                     this.instructionPointer = literalOperand;
-                    // System.out.println("pointer changed to=" + literalOperand);
                     jumpIndex = 0;
                     break;
                 case 4:
@@ -90,42 +89,21 @@ public class Day17Part1 {
                 return registerC;
 
             return (long) literalOperand;
-
-            // throw new Error("combo operand error with " + literalOperand);
         }
     }
 
     public static String processFile() {
-        // List<Integer> program = new ArrayList<>(Arrays.asList(0, 1, 5, 4, 3, 0));
-        // Computer computer = new Computer(729L, 0L, 0L, program);
-
         List<Integer> program = new ArrayList<>(Arrays.asList(2, 4, 1, 6, 7, 5, 4, 4, 1, 7, 0, 3, 5, 5, 3, 0));
         Computer computer = new Computer(47910079998866L, 0L, 0L, program);
-        // Computer computer = new Computer(281474976710651L, 0L, 0L, program);
-        // 281474976710651
-
-        // List<Integer> program = new ArrayList<>(Arrays.asList(2, 6));
-        // Computer computer = new Computer(10L, 29L, 9L, program);
 
         Integer instructionPointer = 0;
         while (instructionPointer < program.size() - 1) {
             Integer opcode = program.get(instructionPointer);
             Integer operand = program.get(instructionPointer + 1);
-            // System.out.println();
-            // System.out.println("pointer=" + instructionPointer);
-            // System.out.println("opcode=" + opcode);
-            // System.out.println("operand=" + operand);
             computer.runInstruction(opcode, operand);
-            // System.out.println();
-            // System.out.println(opcode + "-" + operand);
-            // System.out.println("registerA=" + computer.registerA);
-            // System.out.println("registerB=" + computer.registerB);
-            // System.out.println("registerB=" + computer.registerC);
             instructionPointer = computer.instructionPointer;
         }
         System.out.println(computer.output);
         return computer.output;
     }
 }
-
-// 1,2,0,1,7,4,1,0,3
