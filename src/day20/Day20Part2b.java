@@ -4,8 +4,9 @@ import java.awt.Point;
 import java.io.*;
 import java.util.*;
 
-public class Day20Part1 {
-    public static int trackSize = 141;
+public class Day20Part2b {
+    // public static int trackSize = 141;
+    public static int trackSize = 15;
     public static char[][] track = new char[trackSize][trackSize];
     public static int startX;
     public static int startY;
@@ -20,11 +21,13 @@ public class Day20Part1 {
 
     public static class State implements Comparable<State> {
         int x, y, picoseconds;
+        Set<String> visited;
 
-        public State(int x, int y, int picoseconds) {
+        public State(int x, int y, int picoseconds, Set<String> visited) {
             this.x = x;
             this.y = y;
             this.picoseconds = picoseconds;
+            this.visited = visited;
         }
 
         @Override
@@ -35,7 +38,7 @@ public class Day20Part1 {
 
     public static void readInput() {
         try {
-            File file = new File("resources/day20.txt");
+            File file = new File("resources/day20test.txt");
             Scanner scanner = new Scanner(file);
             int x = 0;
             while (scanner.hasNextLine()) {
@@ -79,36 +82,39 @@ public class Day20Part1 {
         return x >= 0 && y >= 0 && x <= trackSize && y <= trackSize && track[x][y] != '#';
     }
 
-    public static long findShortestPath() {
+    public static List<State> findShortestPath() {
         PriorityQueue<State> queue = new PriorityQueue<>();
-        queue.add(new State(startX, startY, 0));
-        Set<String> visited = new HashSet<>();
+        queue.add(new State(startX, startY, 0, new HashSet<>()));
+        List<State> finalStates = new ArrayList<>();
 
         while (!queue.isEmpty()) {
             State current = queue.poll();
             int x = current.x;
             int y = current.y;
             int picoseconds = current.picoseconds;
+            Set<String> visited = current.visited;
 
             if (x == endX && y == endY) {
-                return picoseconds;
-            }
-
-            String stateKey = x + "," + y;
-
-            if (visited.contains(stateKey)) {
+                System.out.println(picoseconds);
+                finalStates.add(current);
                 continue;
             }
-            visited.add(stateKey);
 
             for (Point direction : directions) {
                 Point next = new Point(x + direction.x, y + direction.y);
+
+                String stateKey = next.x + "," + next.y;
+                if (visited.contains(stateKey)) {
+                    continue;
+                }
+                visited.add(stateKey);
+
                 if (isValid(next.x, next.y)) {
-                    queue.add(new State(next.x, next.y, picoseconds + 1));
+                    queue.add(new State(next.x, next.y, picoseconds + 1, new HashSet<>(visited)));
                 }
             }
         }
-        return -1;
+        return finalStates;
     }
 
     public static void run() {
@@ -116,10 +122,10 @@ public class Day20Part1 {
         printTrack();
         System.out.printf("Start at (%d,%d)%n", startX, startY);
         System.out.printf("End at (%d,%d)%n", endX, endY);
-        long picosecondsOriginal = findShortestPath();
-        System.out.println(picosecondsOriginal);
+        List<State> finalStates = findShortestPath();
+        System.out.println(finalStates.size());
 
-        int times = 0;
+        // int times = 0;
 
         // for (int x = 1; x < trackSize - 1; x++) {
         // for (int y = 1; y < trackSize - 1; y++) {
@@ -136,7 +142,6 @@ public class Day20Part1 {
         // track[x][y] = cell;
         // }
         // }
-
-        System.out.println(times);
+        // System.out.println(times);
     }
 }
