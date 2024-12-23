@@ -5,12 +5,13 @@ import java.io.*;
 import java.util.*;
 
 public class Day20Part1 {
-    public static int trackSize = 15;
-    public static char[][] track = new char[15][15];
+    public static int trackSize = 141;
+    public static char[][] track = new char[trackSize][trackSize];
     public static int startX;
     public static int startY;
     public static int endX;
     public static int endY;
+    public static int minPicosecondsToSave = 100;
     public static List<Point> directions = new ArrayList<>(Arrays.asList(
             new Point(0, 1),
             new Point(1, 0),
@@ -34,7 +35,7 @@ public class Day20Part1 {
 
     public static void readInput() {
         try {
-            File file = new File("resources/day20test.txt");
+            File file = new File("resources/day20.txt");
             Scanner scanner = new Scanner(file);
             int x = 0;
             while (scanner.hasNextLine()) {
@@ -115,8 +116,27 @@ public class Day20Part1 {
         printTrack();
         System.out.printf("Start at (%d,%d)%n", startX, startY);
         System.out.printf("End at (%d,%d)%n", endX, endY);
-        System.out.println(track[2][3]);
-        long result = findShortestPath();
-        System.out.println(result);
+        long picosecondsOriginal = findShortestPath();
+        System.out.println(picosecondsOriginal);
+
+        int times = 0;
+
+        for (int x = 1; x < trackSize - 1; x++) {
+            for (int y = 1; y < trackSize - 1; y++) {
+                System.out.println(x + "-" + y);
+                char cell = track[x][y];
+                if (cell == '.')
+                    continue;
+                track[x][y] = '.';
+                long picoseconds = findShortestPath();
+                // System.out.println(picoseconds);
+                if (picosecondsOriginal - picoseconds >= minPicosecondsToSave) {
+                    times++;
+                }
+                track[x][y] = cell;
+            }
+        }
+
+        System.out.println(times);
     }
 }
