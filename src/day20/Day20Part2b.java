@@ -78,8 +78,12 @@ public class Day20Part2b {
         return x == endX && y == endY;
     }
 
-    public static boolean isValid(int x, int y) {
-        return x >= 0 && y >= 0 && x <= trackSize && y <= trackSize && track[x][y] != '#';
+    public static boolean isOutOfTrack(int x, int y) {
+        return (x < 0 || y < 0 || x > trackSize - 1 || y > trackSize - 1);
+    }
+
+    public static boolean isWall(int x, int y) {
+        return track[x][y] == '#';
     }
 
     public static List<State> findShortestPath() {
@@ -93,6 +97,10 @@ public class Day20Part2b {
             int y = current.y;
             int picoseconds = current.picoseconds;
             Set<String> visited = current.visited;
+
+            if (picoseconds > 70) {
+                continue;
+            }
 
             if (x == endX && y == endY) {
                 System.out.println(picoseconds);
@@ -109,7 +117,7 @@ public class Day20Part2b {
                 }
                 visited.add(stateKey);
 
-                if (isValid(next.x, next.y)) {
+                if (!isWall(next.x, next.y)) {
                     queue.add(new State(next.x, next.y, picoseconds + 1, new HashSet<>(visited)));
                 }
             }
