@@ -5,8 +5,8 @@ import java.io.*;
 import java.util.*;
 
 public class Day20Part1 {
-    public static List<List<Character>> track = new ArrayList<>();
-    public static int memorySize = 15;
+    public static int trackSize = 15;
+    public static char[][] track = new char[15][15];
     public static int startX;
     public static int startY;
     public static int endX;
@@ -36,14 +36,23 @@ public class Day20Part1 {
         try {
             File file = new File("resources/day20test.txt");
             Scanner scanner = new Scanner(file);
+            int x = 0;
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
                 char[] charArray = line.toCharArray();
-                List<Character> row = new ArrayList<>();
-                for (char c : charArray) {
-                    row.add(c);
+                for (int y = 0; y < charArray.length; y++) {
+                    char c = charArray[y];
+                    track[x][y] = c;
+                    if (c == 'S') {
+                        startX = x;
+                        startY = y;
+                    }
+                    if (c == 'E') {
+                        endX = x;
+                        endY = y;
+                    }
                 }
-                track.add(row);
+                x++;
             }
             scanner.close();
         } catch (FileNotFoundException e) {
@@ -52,9 +61,9 @@ public class Day20Part1 {
     }
 
     public static void printTrack() {
-        for (int x = 0; x < memorySize; x++) {
-            for (int y = 0; y < memorySize; y++) {
-                System.out.print(track.get(x).get(y));
+        for (int x = 0; x < trackSize; x++) {
+            for (int y = 0; y < trackSize; y++) {
+                System.out.print(track[x][y]);
             }
             System.out.println();
         }
@@ -66,7 +75,7 @@ public class Day20Part1 {
     }
 
     public static boolean isValid(int x, int y) {
-        return x >= 0 && y >= 0 && x <= endX && y <= endY && track.get(x).get(y) != '#';
+        return x >= 0 && y >= 0 && x <= trackSize && y <= trackSize && track[x][y] != '#';
     }
 
     public static long findShortestPath() {
@@ -104,6 +113,9 @@ public class Day20Part1 {
     public static void run() {
         readInput();
         printTrack();
+        System.out.printf("Start at (%d,%d)%n", startX, startY);
+        System.out.printf("End at (%d,%d)%n", endX, endY);
+        System.out.println(track[2][3]);
         long result = findShortestPath();
         System.out.println(result);
     }
