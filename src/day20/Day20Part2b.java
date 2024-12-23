@@ -117,6 +117,10 @@ public class Day20Part2b {
                 }
                 visited.add(stateKey);
 
+                if (isOutOfTrack(next.x, next.y)) {
+                    continue;
+                }
+
                 if (!isWall(next.x, next.y)) {
                     queue.add(new State(next.x, next.y, picoseconds + 1, new HashSet<>(visited)));
                 }
