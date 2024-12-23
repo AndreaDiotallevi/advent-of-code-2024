@@ -1,10 +1,10 @@
-import day19.Day19Part2;
+import day20.Day20Part1;
 
 public class App {
     public static void main(String[] args) throws Exception {
         // final long startTime = System.currentTimeMillis();
 
-        Day19Part2.run();
+        Day20Part1.run();
 
         // System.out.println(result);
         // final long endTime = System.currentTimeMillis();
