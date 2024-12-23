@@ -7,7 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Day19Part2c {
     public static List<String> patterns = new ArrayList<>();
     public static List<String> designs = new ArrayList<>();
-    public static Map<String, Integer> myMap = new ConcurrentHashMap<>();
+    public static Map<String, Long> myMap = new ConcurrentHashMap<>();
 
     public static void readInput() {
         try {
@@ -32,7 +32,7 @@ public class Day19Part2c {
         }
     }
 
-    public static int createMap(String design) {
+    public static long createMap(String design) {
         if (design.isEmpty()) {
             return 1;
         }
@@ -42,8 +42,8 @@ public class Day19Part2c {
         int count = 0;
         for (String pattern : patterns) {
             if (design.startsWith(pattern)) {
-                int result = createMap(design.substring(pattern.length()));
-                int value = myMap.getOrDefault(design, 0);
+                long result = createMap(design.substring(pattern.length()));
+                long value = myMap.getOrDefault(design, 0L);
                 myMap.put(design, value + result);
                 count += result;
             }
@@ -68,10 +68,11 @@ public class Day19Part2c {
 
         long sum = 0;
         for (String design : designs) {
-            sum += myMap.getOrDefault(design, 0);
+            sum += myMap.getOrDefault(design, 0L);
         }
         System.out.println(sum);
     }
 }
 
 // 35003692383
+// 3496747332959
