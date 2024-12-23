@@ -132,16 +132,22 @@ public class Day19Part1 {
         readInput();
 
         int count = 0;
+        int i = 0;
+        List<Integer> myList = new ArrayList<>();
         for (String design : designs) {
-            System.out.println(design);
+            // System.out.println(design);
             if (valid(design)) {
                 validPatternsSet.add(design);
                 count++;
-                System.out.println(count);
+                myList.add(i);
+                // System.out.println(count);
             } else {
+                // System.out.println(i);
                 invalidPatternsSet.add(design);
             }
+            i++;
         }
+        System.out.println(myList);
 
         System.out.println(count);
     }
