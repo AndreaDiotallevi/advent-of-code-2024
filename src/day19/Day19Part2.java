@@ -2,12 +2,11 @@ package day19;
 
 import java.io.*;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class Day19Part2 {
     public static List<String> patterns = new ArrayList<>();
     public static List<String> designs = new ArrayList<>();
-    public static Map<String, Long> myMap = new ConcurrentHashMap<>();
+    public static Map<String, Long> myMap = new HashMap<>();
 
     public static void readInput() {
         try {
