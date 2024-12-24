@@ -35,7 +35,7 @@ public class Day20Part1 {
 
     public static void readInput() {
         try {
-            File file = new File("resources/day20.txt");
+            File file = new File("resources/day20test.txt");
             Scanner scanner = new Scanner(file);
             int x = 0;
             while (scanner.hasNextLine()) {
