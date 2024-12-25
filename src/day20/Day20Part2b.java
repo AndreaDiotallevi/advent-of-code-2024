@@ -15,7 +15,7 @@ public class Day20Part2b {
     // public static int minPicosecondsToSave = 100;
     // public static int originalPicoseconds = 9504;
     public static int originalPicoseconds = 84;
-    public static int minPicosecondsToSave = 76;
+    public static int minPicosecondsToSave = 72;
     public static int maxCheatPicoseconds = 20;
     public static List<Point> directions = new ArrayList<>(Arrays.asList(
             new Point(0, 1),
@@ -30,18 +30,24 @@ public class Day20Part2b {
     }
 
     public static class State implements Comparable<State> {
-        int x, y, picoseconds, cheatPicoseconds, startCheatX, startCheatY, endCheatX, endCheatY;
+        int x, y, picoseconds, cheatPicoseconds, startCheatX, startCheatY, endCheatX, endCheatY, endCheatStandbyX,
+                endCheatStandbyY;
         Set<String> visited;
-        CheatingStatus cheatingStatus;
 
         public State(int x, int y, int picoseconds, Set<String> visited, int cheatPicoseconds,
-                CheatingStatus cheatingStatus) {
+                int startCheatX, int startCheatY, int endCheatX, int endCheatY, int endCheatStandbyX,
+                int endCheatStandbyY) {
             this.x = x;
             this.y = y;
             this.picoseconds = picoseconds;
             this.visited = visited;
             this.cheatPicoseconds = cheatPicoseconds;
-            this.cheatingStatus = cheatingStatus;
+            this.startCheatX = startCheatX;
+            this.startCheatY = startCheatY;
+            this.endCheatX = endCheatX;
+            this.endCheatY = endCheatY;
+            this.endCheatStandbyX = endCheatStandbyX;
+            this.endCheatStandbyY = endCheatStandbyY;
         }
 
         public void setStateCheat(int x, int y) {
@@ -50,8 +56,15 @@ public class Day20Part2b {
         }
 
         public void setEndCheat(int x, int y) {
+            System.out.println("setting end cheat" + x + "-" + y);
             this.endCheatX = x;
             this.endCheatY = y;
+            System.out.println(this.endCheatX + "-" + this.endCheatY);
+        }
+
+        public String getVisitedKey() {
+            return x + "," + y + "," + startCheatX + "," + startCheatY + "," + endCheatX + ","
+                    + endCheatY + "," + picoseconds;
         }
 
         @Override
@@ -112,9 +125,12 @@ public class Day20Part2b {
 
     public static List<State> findShortestPath() {
         PriorityQueue<State> queue = new PriorityQueue<>();
-        queue.add(new State(startX, startY, 0, new HashSet<>(), 0, CheatingStatus.NOT_STARTED));
+        State startingState = new State(startX, startY, 0, new HashSet<>(), 0, -1,
+                -1, -1, -1, -1, -1);
+        queue.add(startingState);
         List<State> finalStates = new ArrayList<>();
         int max = originalPicoseconds - minPicosecondsToSave;
+        Set<String> visitedGeneral = new HashSet<>();
 
         while (!queue.isEmpty()) {
             State current = queue.poll();
@@ -123,16 +139,40 @@ public class Day20Part2b {
             int picoseconds = current.picoseconds;
             Set<String> visited = current.visited;
             int cheatPicoseconds = current.cheatPicoseconds;
-            CheatingStatus cheatingStatus = current.cheatingStatus;
+            String visitedGeneralKey = current.getVisitedKey();
+            int startCheatX = current.startCheatX;
+            int startCheatY = current.startCheatY;
+            int endCheatX = current.endCheatX;
+            int endCheatY = current.endCheatY;
+            int endCheatStandbyX = current.endCheatStandbyX;
+            int endCheatStandbyY = current.endCheatStandbyY;
+            // System.out.println();
 
-            System.out.println(picoseconds);
+            // if (!(x == 3 && y == 1 || x == 4 && y == 1 || x == 5 && y == 1 || x == 6 && y
+            // == 1 || x == 7 && y == 1
+            // || x == 7 && y == 2
+            // || x == 7 && y == 3 || x == 7 && y == 4 || x == 7 && y == 5)) {
+            // continue;
+            // }
+
+            if (visitedGeneral.contains(visitedGeneralKey)) {
+                if (current.startCheatX > -1 && current.endCheatX > -1) {
+                    System.out.println("KKKKK");
+                    // continue;
+                }
+            }
+
+            visitedGeneral.add(visitedGeneralKey);
 
             if (Math.abs(x - endX) + Math.abs(y - endY) + picoseconds > max) {
                 continue;
             }
 
             if (x == endX && y == endY) {
-                System.out.println(picoseconds);
+                current.endCheatX = current.endCheatStandbyX;
+                current.endCheatY = current.endCheatStandbyY;
+                System.out.println("Arrived with " + picoseconds + " picoseconds.");
+                System.out.println("End cheat=" + current.endCheatX + "," + current.endCheatY);
                 finalStates.add(current);
                 continue;
             }
@@ -143,7 +183,7 @@ public class Day20Part2b {
 
                 String stateKey = next.x + "," + next.y;
                 if (visited.contains(stateKey)) {
-                    continue;
+                    // continue;
                 }
                 visited.add(stateKey);
 
@@ -151,41 +191,43 @@ public class Day20Part2b {
                     continue;
                 }
 
-                CheatingStatus newCheatingStatus = cheatingStatus;
-                boolean setStartCheat = false;
+                int nextStartCheatX = startCheatX;
+                int nextStartCheatY = startCheatY;
+                int nextEndCheatX = endCheatX;
+                int nextEndCheatY = endCheatY;
+                int nextEndCheatStandbyX = endCheatStandbyX;
+                int nextEndCheatStandbyY = endCheatStandbyY;
+
+                if (cheatPicoseconds > 0 && cheatPicoseconds <= maxCheatPicoseconds) {
+                    cheat = true;
+                }
 
                 if (isWall(next.x, next.y)) {
-                    if (cheatingStatus == CheatingStatus.FINISHED) {
+                    if (cheatPicoseconds == maxCheatPicoseconds) {
                         continue;
                     }
-                    if (cheatPicoseconds >= maxCheatPicoseconds) {
-                        continue;
-                    }
-                    if (cheatingStatus == CheatingStatus.NOT_STARTED) {
-                        newCheatingStatus = CheatingStatus.IN_PROGRESS;
-                        setStartCheat = true;
+                    if (cheatPicoseconds == 0) {
+                        nextStartCheatX = x;
+                        nextStartCheatY = y;
                     }
                     cheat = true;
                 } else {
-                    if (cheatingStatus == CheatingStatus.IN_PROGRESS) {
-                        newCheatingStatus = CheatingStatus.FINISHED;
+                    if (cheatPicoseconds > 0 && cheatPicoseconds <= maxCheatPicoseconds
+                            && isWall(x, y)) {
+                        System.out.println("///");
+                        System.out.println("current wall=" + x + "," + y);
+                        System.out.println("next end cheat=" + next.x + "," + next.y);
+                        nextEndCheatStandbyX = next.x;
+                        nextEndCheatStandbyY = next.y;
                     }
                 }
 
                 State state = new State(next.x, next.y, picoseconds + 1, new HashSet<>(visited),
-                        cheat ? cheatPicoseconds + 1 : cheatPicoseconds, newCheatingStatus);
-
-                if (setStartCheat) {
-                    System.out.println("start");
-                    state.setStateCheat(next.x, next.y);
-                    System.out.println("///");
-                    System.out.println(state.startCheatX);
-                }
-
-                if (cheat) {
-                    System.out.println("end");
-                    state.setEndCheat(next.x, next.y);
-                }
+                        cheat ? cheatPicoseconds + 1 : cheatPicoseconds,
+                        nextStartCheatX,
+                        nextStartCheatY,
+                        nextEndCheatX,
+                        nextEndCheatY, nextEndCheatStandbyX, nextEndCheatStandbyY);
 
                 queue.add(state);
             }
@@ -201,29 +243,32 @@ public class Day20Part2b {
         List<State> finalStates = findShortestPath();
         System.out.println("Number of paths: " + finalStates.size());
 
+        Map<Integer, Set<String>> myMap = new HashMap<>();
+        Set<String> generalSet = new HashSet<>();
+
         for (State finalState : finalStates) {
-            // System.out.println();
-            // System.out.println(finalState.startCheatX + "-" + finalState.startCheatY);
-            // System.out.println(finalState.endCheatX + "-" + finalState.endCheatY);
+            String key = finalState.startCheatX + "," + finalState.startCheatY + "," + finalState.endCheatX + ","
+                    + finalState.endCheatY;
+
+            if (generalSet.contains(key)) {
+                continue;
+            } else {
+                generalSet.add(key);
+            }
+
+            Set<String> mySet = myMap.getOrDefault(finalState.picoseconds, new HashSet<>());
+
+            mySet.add(key);
+
+            myMap.put(finalState.picoseconds, mySet);
         }
 
-        // int times = 0;
+        System.out.println(myMap);
 
-        // for (int x = 1; x < trackSize - 1; x++) {
-        // for (int y = 1; y < trackSize - 1; y++) {
-        // System.out.println(x + "-" + y);
-        // char cell = track[x][y];
-        // if (cell == '.')
-        // continue;
-        // track[x][y] = '.';
-        // long picoseconds = findShortestPath();
-        // // System.out.println(picoseconds);
-        // if (picosecondsOriginal - picoseconds >= minPicosecondsToSave) {
-        // times++;
-        // }
-        // track[x][y] = cell;
-        // }
-        // }
-        // System.out.println(times);
+        long sum = 0;
+        for (int key : myMap.keySet()) {
+            sum += myMap.get(key).size();
+        }
+        System.out.println(sum);
     }
 }
