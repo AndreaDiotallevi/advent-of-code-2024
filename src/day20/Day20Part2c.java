@@ -131,8 +131,8 @@ public class Day20Part2c {
         System.out.printf("Start at (%d,%d)%n", startX, startY);
         System.out.printf("End at (%d,%d)%n", endX, endY);
         List<Point> path = findShortestPath();
-        System.out.println(path);
         System.out.println(path.size());
-
+        Collections.reverse(path);
+        System.out.println(path);
     }
 }
