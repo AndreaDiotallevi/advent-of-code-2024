@@ -81,7 +81,7 @@ public class Day20Part2c {
         return x >= 0 && y >= 0 && x <= trackSize && y <= trackSize && track[x][y] != '#';
     }
 
-    public static List<State> findShortestPath() {
+    public static List<Point> findShortestPath() {
         PriorityQueue<State> queue = new PriorityQueue<>();
         queue.add(new State(startX, startY, 0, null));
         Set<String> visited = new HashSet<>();
@@ -113,12 +113,12 @@ public class Day20Part2c {
         return new ArrayList<>();
     }
 
-    public static List<State> backtrack(State state) {
+    public static List<Point> backtrack(State state) {
         State current = state;
-        List<State> path = new ArrayList<>();
+        List<Point> path = new ArrayList<>();
 
         while (current != null) {
-            path.add(current);
+            path.add(new Point(current.x, current.y));
             current = current.parent;
         }
 
@@ -130,7 +130,7 @@ public class Day20Part2c {
         printTrack();
         System.out.printf("Start at (%d,%d)%n", startX, startY);
         System.out.printf("End at (%d,%d)%n", endX, endY);
-        List<State> path = findShortestPath();
+        List<Point> path = findShortestPath();
         System.out.println(path);
         System.out.println(path.size());
 
