@@ -121,21 +121,21 @@ public class Day20Part1 {
 
         int times = 0;
 
-        // for (int x = 1; x < trackSize - 1; x++) {
-        // for (int y = 1; y < trackSize - 1; y++) {
-        // System.out.println(x + "-" + y);
-        // char cell = track[x][y];
-        // if (cell == '.')
-        // continue;
-        // track[x][y] = '.';
-        // long picoseconds = findShortestPath();
-        // // System.out.println(picoseconds);
-        // if (picosecondsOriginal - picoseconds >= minPicosecondsToSave) {
-        // times++;
-        // }
-        // track[x][y] = cell;
-        // }
-        // }
+        for (int x = 1; x < trackSize - 1; x++) {
+            for (int y = 1; y < trackSize - 1; y++) {
+                System.out.println(x + "-" + y);
+                char cell = track[x][y];
+                if (cell == '.')
+                    continue;
+                track[x][y] = '.';
+                long picoseconds = findShortestPath();
+                // System.out.println(picoseconds);
+                if (picosecondsOriginal - picoseconds >= minPicosecondsToSave) {
+                    times++;
+                }
+                track[x][y] = cell;
+            }
+        }
 
         System.out.println(times);
     }

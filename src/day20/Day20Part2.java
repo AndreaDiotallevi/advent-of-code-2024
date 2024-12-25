@@ -5,18 +5,16 @@ import java.io.*;
 import java.util.*;
 
 public class Day20Part2 {
-    // public static int trackSize = 141;
-    public static int trackSize = 15;
+    public static int trackSize = 141;
+    // public static int trackSize = 15;
     public static char[][] track = new char[trackSize][trackSize];
     public static int startX;
     public static int startY;
     public static int endX;
     public static int endY;
-    // public static int minPicosecondsToSave = 100;
-    public static int minPicosecondsToSave = 0;
-    public static int maxCheatPicoseconds = 20;
-    // public static int picosecondsOriginal = 9504;
-    public static int picosecondsOriginal = 84;
+    public static int maxCheat = 20;
+    public static int minPicosecondsToSave = 100;
+    // public static int minPicosecondsToSave = 72;
     public static List<Point> directions = new ArrayList<>(Arrays.asList(
             new Point(0, 1),
             new Point(1, 0),
@@ -24,33 +22,14 @@ public class Day20Part2 {
             new Point(-1, 0)));
 
     public static class State implements Comparable<State> {
-        int x, y, picoseconds, cheatStartX, cheatStartY, cheatEndX, cheatEndY, cheatPicosecondsUsed;
-        Set<String> visited;
+        int x, y, picoseconds;
+        State parent;
 
-        public State(int x, int y, int picoseconds, int cheatPicosecondsUsed, Set<String> visited) {
+        public State(int x, int y, int picoseconds, State parent) {
             this.x = x;
             this.y = y;
             this.picoseconds = picoseconds;
-            this.cheatPicosecondsUsed = 0;
-            this.visited = visited;
-        }
-
-        public void setCheatStart(int x, int y) {
-            this.cheatStartX = x;
-            this.cheatStartY = y;
-        }
-
-        public void setCheatEnd(int x, int y) {
-            this.cheatStartX = x;
-            this.cheatStartY = y;
-        }
-
-        public void addToVisited(int x, int y) {
-            visited.add(x + "," + y);
-        }
-
-        public boolean isVisited(int x, int y) {
-            return visited.contains(x + "," + y);
+            this.parent = parent;
         }
 
         @Override
@@ -61,7 +40,7 @@ public class Day20Part2 {
 
     public static void readInput() {
         try {
-            File file = new File("resources/day20test.txt");
+            File file = new File("resources/day20.txt");
             Scanner scanner = new Scanner(file);
             int x = 0;
             while (scanner.hasNextLine()) {
@@ -101,89 +80,56 @@ public class Day20Part2 {
         return x == endX && y == endY;
     }
 
-    public static boolean isOutOfTrack(int x, int y) {
-        return (x < 0 || y < 0 || x > trackSize - 1 || y > trackSize - 1);
+    public static boolean isValid(int x, int y) {
+        return x >= 0 && y >= 0 && x <= trackSize && y <= trackSize && track[x][y] != '#';
     }
 
-    public static boolean isWall(int x, int y) {
-        return track[x][y] == '#';
-    }
-
-    public static List<State> findShortestPath() {
+    public static List<Point> findShortestPath() {
         PriorityQueue<State> queue = new PriorityQueue<>();
-        queue.add(new State(startX, startY, 0, 0, new HashSet<>()));
-        int maxPicoseconds = picosecondsOriginal - minPicosecondsToSave;
-        List<State> finalStates = new ArrayList<>();
+        queue.add(new State(startX, startY, 0, null));
+        Set<String> visited = new HashSet<>();
 
         while (!queue.isEmpty()) {
             State current = queue.poll();
             int x = current.x;
             int y = current.y;
             int picoseconds = current.picoseconds;
-            int cheatPicosecondsUsed = current.cheatPicosecondsUsed;
-            Set<String> visited = current.visited;
-            // System.out.println(cheatPicosecondsUsed);
-            // System.out.println(queue.size());
-
-            if (picoseconds > maxPicoseconds) {
-                System.out.println("Too many picoseconds");
-                break;
-            }
 
             if (x == endX && y == endY) {
-                // System.out.println("Arrived");
-                finalStates.add(current);
+                return backtrack(current);
+            }
+
+            String stateKey = x + "," + y;
+
+            if (visited.contains(stateKey)) {
                 continue;
             }
-
-            List<State> adjacentNodes = new ArrayList<>();
+            visited.add(stateKey);
 
             for (Point direction : directions) {
-                boolean cheat = false;
-                int newX = x + direction.x;
-                int newY = y + direction.y;
-                if (isOutOfTrack(newX, newY)) {
-                    continue;
+                Point next = new Point(x + direction.x, y + direction.y);
+                if (isValid(next.x, next.y)) {
+                    queue.add(new State(next.x, next.y, picoseconds + 1, current));
                 }
-                if (isWall(newX, newY)) {
-                    if (cheatPicosecondsUsed + 1 > maxCheatPicoseconds) {
-                        System.out.println("Too many cheat picoseconds");
-                        continue;
-                    } else {
-                        cheat = true;
-                    }
-                }
-                Set<String> newVisited = new HashSet<>(visited);
-                newVisited.add(x + "," + y);
-                State state = new State(newX, newY, picoseconds + 1, cheatPicosecondsUsed + (cheat ? 1 : 0),
-                        newVisited);
-
-                if (cheat) {
-                    if (state.cheatPicosecondsUsed == 0) {
-                        state.setCheatStart(newX, newY);
-                    }
-                    // System.out.println(state.cheatPicosecondsUsed);
-                    state.cheatPicosecondsUsed++;
-                    // System.out.println(state.cheatPicosecondsUsed);
-                    state.setCheatEnd(newX, newY);
-                }
-
-                adjacentNodes.add(state);
-            }
-
-            for (State adjacent : adjacentNodes) {
-                if (visited.contains(adjacent.x + "," + adjacent.y)) {
-                    System.out.println("visited");
-                    continue;
-                }
-                visited.add(x + "," + y);
-                adjacent.visited = new HashSet<>(visited);
-
-                queue.add(adjacent);
             }
         }
+        return new ArrayList<>();
+    }
 
-        return finalStates;
+    public static List<Point> backtrack(State state) {
+        State current = state;
+        List<Point> path = new ArrayList<>();
+
+        while (current != null) {
+            path.add(new Point(current.x, current.y));
+            current = current.parent;
+        }
+
+        return path;
+    }
+
+    public static int getDistance(Point p1, Point p2) {
+        return Math.abs(p1.x - p2.x) + Math.abs(p1.y - p2.y);
     }
 
     public static void run() {
@@ -191,27 +137,30 @@ public class Day20Part2 {
         printTrack();
         System.out.printf("Start at (%d,%d)%n", startX, startY);
         System.out.printf("End at (%d,%d)%n", endX, endY);
-        List<State> finalStates = findShortestPath();
-        System.out.println(finalStates.size());
+        List<Point> path = findShortestPath();
 
-        // int times = 0;
+        Collections.reverse(path);
 
-        // for (int x = 1; x < trackSize - 1; x++) {
-        // for (int y = 1; y < trackSize - 1; y++) {
-        // System.out.println(x + "-" + y);
-        // char cell = track[x][y];
-        // if (cell == '.')
-        // continue;
-        // track[x][y] = '.';
-        // long picoseconds = findShortestPath();
-        // // System.out.println(picoseconds);
-        // if (picosecondsOriginal - picoseconds >= minPicosecondsToSave) {
-        // times++;
-        // }
-        // track[x][y] = cell;
-        // }
-        // }
+        long count = 0;
 
-        // System.out.println(times);
+        Map<Point, Integer> originalDistances = new HashMap<>();
+
+        for (int i = 0; i < path.size(); i++) {
+            Point point = path.get(i);
+            originalDistances.put(point, path.size() - i - 1);
+        }
+
+        for (Point start : path) {
+            for (Point end : path) {
+                int originalDistance = originalDistances.get(start);
+                int d1 = getDistance(start, end);
+                int d2 = originalDistances.get(end);
+                if (d1 <= maxCheat && originalDistance - (d1 + d2) >= minPicosecondsToSave) {
+                    count++;
+                }
+            }
+        }
+
+        System.out.println(count);
     }
 }
