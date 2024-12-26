@@ -40,6 +40,7 @@ public class Day21Part1 {
                 }
                 System.out.println();
             }
+            System.out.println("Current is: " + buttons[current.x][current.y]);
             System.out.println();
         }
     }
