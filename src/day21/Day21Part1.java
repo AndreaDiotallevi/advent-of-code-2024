@@ -8,9 +8,9 @@ public class Day21Part1 {
     public static List<Keypad> keypads = new ArrayList<>();
 
     public static class Keypad {
-        char[][] buttons;
-        Point current;
-        List<Point> directions = new ArrayList<>(Arrays.asList(
+        public char[][] buttons;
+        public Point current;
+        public List<Point> directions = new ArrayList<>(Arrays.asList(
                 new Point(0, 1),
                 new Point(1, 0),
                 new Point(0, -1),
@@ -21,7 +21,7 @@ public class Day21Part1 {
             this.current = current;
         }
 
-        public List<Point> getShortestPath() {
+        public List<Point> getShortestPath(char c) {
             return new ArrayList<>();
         }
 
@@ -31,6 +31,16 @@ public class Day21Part1 {
 
         public boolean isValid(int x, int y) {
             return (x >= 0 && y >= 0 && x <= buttons.length - 1 && y <= buttons[0].length - 1 && buttons[x][y] != '#');
+        }
+
+        public void printButtons() {
+            for (int x = 0; x < this.buttons.length; x++) {
+                for (int y = 0; y < this.buttons[0].length; y++) {
+                    System.out.print(buttons[x][y]);
+                }
+                System.out.println();
+            }
+            System.out.println();
         }
     }
 
@@ -50,20 +60,22 @@ public class Day21Part1 {
         numericKeypadButtons[3][2] = 'A';
         Keypad numericKeypad = new Keypad(numericKeypadButtons, new Point(3, 2));
         keypads.add(numericKeypad);
+        numericKeypad.printButtons();
 
-        char[][] directionalKeypadButtons = new char[3][2];
-        numericKeypadButtons[0][0] = '#';
-        numericKeypadButtons[0][1] = '^';
-        numericKeypadButtons[0][2] = 'A';
-        numericKeypadButtons[1][0] = '<';
-        numericKeypadButtons[1][1] = 'v';
-        numericKeypadButtons[1][2] = '>';
+        char[][] directionalKeypadButtons = new char[2][3];
+        directionalKeypadButtons[0][0] = '#';
+        directionalKeypadButtons[0][1] = '^';
+        directionalKeypadButtons[0][2] = 'A';
+        directionalKeypadButtons[1][0] = '<';
+        directionalKeypadButtons[1][1] = 'v';
+        directionalKeypadButtons[1][2] = '>';
         Keypad directionalKeypad1 = new Keypad(directionalKeypadButtons, new Point(0, 2));
         Keypad directionalKeypad2 = new Keypad(directionalKeypadButtons, new Point(0, 2));
         Keypad directionalKeypad3 = new Keypad(directionalKeypadButtons, new Point(0, 2));
         keypads.add(directionalKeypad1);
         keypads.add(directionalKeypad2);
         keypads.add(directionalKeypad3);
+        directionalKeypad1.printButtons();
     }
 
     public static void run() {
