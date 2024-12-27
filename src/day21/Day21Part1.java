@@ -12,10 +12,10 @@ public class Day21Part1 {
             new Point(0, -1),
             new Point(-1, 0)));
     public static Map<Point, Character> directionsToChars = Map.of(
-            new Point(0, 1), '>',
-            new Point(1, 0), 'v',
-            new Point(0, -1), '<',
-            new Point(-1, 0), '^');
+            new Point(0, 1), 'v',
+            new Point(1, 0), '>',
+            new Point(0, -1), '^',
+            new Point(-1, 0), '<');
 
     public static class State implements Comparable<State> {
         int steps;
@@ -107,28 +107,28 @@ public class Day21Part1 {
     public static void setup() {
         Map<Point, Character> buttonsToChars = new HashMap<>();
         buttonsToChars.put(new Point(0, 0), '7');
-        buttonsToChars.put(new Point(0, 1), '8');
-        buttonsToChars.put(new Point(0, 2), '9');
-        buttonsToChars.put(new Point(1, 0), '4');
+        buttonsToChars.put(new Point(1, 0), '8');
+        buttonsToChars.put(new Point(2, 0), '9');
+        buttonsToChars.put(new Point(0, 1), '4');
         buttonsToChars.put(new Point(1, 1), '5');
-        buttonsToChars.put(new Point(1, 2), '6');
-        buttonsToChars.put(new Point(2, 0), '1');
-        buttonsToChars.put(new Point(2, 1), '2');
+        buttonsToChars.put(new Point(2, 1), '6');
+        buttonsToChars.put(new Point(0, 2), '1');
+        buttonsToChars.put(new Point(1, 2), '2');
         buttonsToChars.put(new Point(2, 2), '3');
-        buttonsToChars.put(new Point(3, 1), '0');
-        buttonsToChars.put(new Point(3, 2), 'A');
-        Keypad numericKeypad = new Keypad(buttonsToChars, invertMap(buttonsToChars), new Point(3, 2));
+        buttonsToChars.put(new Point(1, 3), '0');
+        buttonsToChars.put(new Point(2, 3), 'A');
+        Keypad numericKeypad = new Keypad(buttonsToChars, invertMap(buttonsToChars), new Point(2, 3));
         keypads.add(numericKeypad);
 
         Map<Point, Character> buttonsToChars2 = new HashMap<>();
-        buttonsToChars2.put(new Point(0, 1), '^');
-        buttonsToChars2.put(new Point(0, 2), 'A');
-        buttonsToChars2.put(new Point(1, 0), '<');
+        buttonsToChars2.put(new Point(1, 0), '^');
+        buttonsToChars2.put(new Point(2, 0), 'A');
+        buttonsToChars2.put(new Point(0, 1), '<');
         buttonsToChars2.put(new Point(1, 1), 'v');
-        buttonsToChars2.put(new Point(1, 2), '>');
-        Keypad directionalKeypad1 = new Keypad(buttonsToChars2, invertMap(buttonsToChars2), new Point(0, 2));
-        Keypad directionalKeypad2 = new Keypad(buttonsToChars2, invertMap(buttonsToChars2), new Point(0, 2));
-        Keypad directionalKeypad3 = new Keypad(buttonsToChars2, invertMap(buttonsToChars2), new Point(0, 2));
+        buttonsToChars2.put(new Point(2, 1), '>');
+        Keypad directionalKeypad1 = new Keypad(buttonsToChars2, invertMap(buttonsToChars2), new Point(2, 0));
+        Keypad directionalKeypad2 = new Keypad(buttonsToChars2, invertMap(buttonsToChars2), new Point(2, 0));
+        Keypad directionalKeypad3 = new Keypad(buttonsToChars2, invertMap(buttonsToChars2), new Point(2, 0));
         keypads.add(directionalKeypad1);
         keypads.add(directionalKeypad2);
         keypads.add(directionalKeypad3);
@@ -138,10 +138,25 @@ public class Day21Part1 {
         setup();
         String s = "029A";
         char[] charArray = s.toCharArray();
-        List<Character> result = new ArrayList<>();
+
+        List<Character> charList = new ArrayList<>();
         for (char c : charArray) {
-            result.addAll(keypads.get(0).findShortestPath(c));
+            charList.add(c);
         }
-        System.out.println(result);
+
+        int depth = 0;
+
+        while (depth <= 2) {
+            List<Character> result = new ArrayList<>();
+            for (char c : charList) {
+                result.addAll(keypads.get(depth).findShortestPath(c));
+            }
+            depth++;
+            charList = result;
+            System.out.println(result);
+            System.out.println();
+        }
+
+        System.out.println(charList.size());
     }
 }
