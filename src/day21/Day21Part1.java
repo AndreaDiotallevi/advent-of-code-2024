@@ -176,11 +176,11 @@ public class Day21Part1 {
         for (String word : words) {
             List<Character> result = wordResult(word);
             System.out.println(result.size());
-            System.out.println(findNumericPart(word));
+            // System.out.println(findNumericPart(word));
             sum += result.size() * findNumericPart(word);
         }
 
-        System.out.println(sum);
+        // System.out.println(sum);
     }
 }
 
