@@ -134,9 +134,7 @@ public class Day21Part1 {
         keypads.add(directionalKeypad3);
     }
 
-    public static void run() {
-        setup();
-        String s = "029A";
+    public static List<Character> wordResult(String s) {
         char[] charArray = s.toCharArray();
 
         List<Character> charList = new ArrayList<>();
@@ -157,6 +155,33 @@ public class Day21Part1 {
             System.out.println();
         }
 
-        System.out.println(charList.size());
+        return charList;
+    }
+
+    public static long findNumericPart(String s) {
+        String numericPart = s.replaceAll("[^0-9]", "");
+        int number = Integer.parseInt(numericPart);
+        return number;
+    }
+
+    public static void run() {
+        setup();
+        // List<String> words = new ArrayList<>(Arrays.asList("129A", "176A", "985A",
+        // "170A", "528A"));
+        // List<String> words = new ArrayList<>(Arrays.asList("029A", "980A", "179A",
+        // "456A", "379A"));
+        List<String> words = new ArrayList<>(Arrays.asList("379A"));
+        long sum = 0;
+
+        for (String word : words) {
+            List<Character> result = wordResult(word);
+            System.out.println(result.size());
+            System.out.println(findNumericPart(word));
+            sum += result.size() * findNumericPart(word);
+        }
+
+        System.out.println(sum);
     }
 }
+
+// 145896
