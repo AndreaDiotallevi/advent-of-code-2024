@@ -6,80 +6,142 @@ import java.util.*;
 
 public class Day21Part1 {
     public static List<Keypad> keypads = new ArrayList<>();
+    public static List<Point> directions = new ArrayList<>(Arrays.asList(
+            new Point(0, 1),
+            new Point(1, 0),
+            new Point(0, -1),
+            new Point(-1, 0)));
+    public static Map<Point, Character> directionsToChars = Map.of(
+            new Point(0, 1), '>',
+            new Point(1, 0), 'v',
+            new Point(0, -1), '<',
+            new Point(-1, 0), '^');
+
+    public static class State implements Comparable<State> {
+        int steps;
+        Point point;
+        Point direction;
+        State previous;
+
+        public State(Point point, int steps, Point direction, State previous) {
+            this.point = point;
+            this.steps = steps;
+            this.direction = direction;
+            this.previous = previous;
+        }
+
+        @Override
+        public int compareTo(State other) {
+            return Integer.compare(this.steps, other.steps);
+        }
+    }
 
     public static class Keypad {
-        public char[][] buttons;
+        public Map<Point, Character> buttonsToChars = new HashMap<>();
+        public Map<Character, Point> charsToButtons = new HashMap<>();
         public Point current;
-        public List<Point> directions = new ArrayList<>(Arrays.asList(
-                new Point(0, 1),
-                new Point(1, 0),
-                new Point(0, -1),
-                new Point(-1, 0)));
 
-        public Keypad(char[][] buttons, Point current) {
-            this.buttons = buttons;
+        public Keypad(Map<Point, Character> buttonsToChars, Map<Character, Point> charsToButtons, Point current) {
+            this.buttonsToChars = buttonsToChars;
+            this.charsToButtons = charsToButtons;
             this.current = current;
         }
 
-        public List<Point> getShortestPath(char c) {
+        public List<Character> findShortestPath(char end) {
+            Queue<State> queue = new PriorityQueue<>();
+            Point startPoint = charsToButtons.get(buttonsToChars.get(current));
+            queue.add(new State(startPoint, 0, null, null));
+            Set<Point> visited = new HashSet<>();
+
+            while (!queue.isEmpty()) {
+                State current = queue.poll();
+                if (buttonsToChars.get(current.point) == end) {
+                    this.current = charsToButtons.get(end);
+                    return backtrackDirections(current);
+                }
+                if (visited.contains(current.point)) {
+                    continue;
+                }
+                visited.add(current.point);
+                for (Point direction : directions) {
+                    Point next = new Point(current.point.x + direction.x, current.point.y + direction.y);
+                    if (isValid(next)) {
+                        queue.add(new State(next, current.steps + 1, direction, current));
+                    }
+                }
+            }
+
             return new ArrayList<>();
+        }
+
+        public List<Character> backtrackDirections(State endState) {
+            State current = endState;
+            List<Character> path = new ArrayList<>();
+            while (current.direction != null) {
+                char c = directionsToChars.get(current.direction);
+                path.add(c);
+                current = current.previous;
+            }
+            Collections.reverse(path);
+            path.add('A');
+            return path;
         }
 
         public List<Character> translatePathToChars() {
             return new ArrayList<>();
         }
 
-        public boolean isValid(int x, int y) {
-            return (x >= 0 && y >= 0 && x <= buttons.length - 1 && y <= buttons[0].length - 1 && buttons[x][y] != '#');
-        }
-
-        public void printButtons() {
-            for (int x = 0; x < this.buttons.length; x++) {
-                for (int y = 0; y < this.buttons[0].length; y++) {
-                    System.out.print(buttons[x][y]);
-                }
-                System.out.println();
-            }
-            System.out.println("Current is: " + buttons[current.x][current.y]);
-            System.out.println();
+        public boolean isValid(Point point) {
+            return buttonsToChars.containsKey(point);
         }
     }
 
-    public static void setup() {
-        char[][] numericKeypadButtons = new char[4][3];
-        numericKeypadButtons[0][0] = '7';
-        numericKeypadButtons[0][1] = '8';
-        numericKeypadButtons[0][2] = '9';
-        numericKeypadButtons[1][0] = '4';
-        numericKeypadButtons[1][1] = '5';
-        numericKeypadButtons[1][2] = '6';
-        numericKeypadButtons[2][0] = '1';
-        numericKeypadButtons[2][1] = '2';
-        numericKeypadButtons[2][2] = '3';
-        numericKeypadButtons[3][0] = '#';
-        numericKeypadButtons[3][1] = '0';
-        numericKeypadButtons[3][2] = 'A';
-        Keypad numericKeypad = new Keypad(numericKeypadButtons, new Point(3, 2));
-        keypads.add(numericKeypad);
-        numericKeypad.printButtons();
+    public static Map<Character, Point> invertMap(Map<Point, Character> buttonsToChars) {
+        Map<Character, Point> charsToButtons = new HashMap<>();
+        for (Map.Entry<Point, Character> entry : buttonsToChars.entrySet()) {
+            charsToButtons.put(entry.getValue(), entry.getKey());
+        }
+        return charsToButtons;
+    }
 
-        char[][] directionalKeypadButtons = new char[2][3];
-        directionalKeypadButtons[0][0] = '#';
-        directionalKeypadButtons[0][1] = '^';
-        directionalKeypadButtons[0][2] = 'A';
-        directionalKeypadButtons[1][0] = '<';
-        directionalKeypadButtons[1][1] = 'v';
-        directionalKeypadButtons[1][2] = '>';
-        Keypad directionalKeypad1 = new Keypad(directionalKeypadButtons, new Point(0, 2));
-        Keypad directionalKeypad2 = new Keypad(directionalKeypadButtons, new Point(0, 2));
-        Keypad directionalKeypad3 = new Keypad(directionalKeypadButtons, new Point(0, 2));
+    public static void setup() {
+        Map<Point, Character> buttonsToChars = new HashMap<>();
+        buttonsToChars.put(new Point(0, 0), '7');
+        buttonsToChars.put(new Point(0, 1), '8');
+        buttonsToChars.put(new Point(0, 2), '9');
+        buttonsToChars.put(new Point(1, 0), '4');
+        buttonsToChars.put(new Point(1, 1), '5');
+        buttonsToChars.put(new Point(1, 2), '6');
+        buttonsToChars.put(new Point(2, 0), '1');
+        buttonsToChars.put(new Point(2, 1), '2');
+        buttonsToChars.put(new Point(2, 2), '3');
+        buttonsToChars.put(new Point(3, 1), '0');
+        buttonsToChars.put(new Point(3, 2), 'A');
+        Keypad numericKeypad = new Keypad(buttonsToChars, invertMap(buttonsToChars), new Point(3, 2));
+        keypads.add(numericKeypad);
+
+        Map<Point, Character> buttonsToChars2 = new HashMap<>();
+        buttonsToChars2.put(new Point(0, 1), '^');
+        buttonsToChars2.put(new Point(0, 2), 'A');
+        buttonsToChars2.put(new Point(1, 0), '<');
+        buttonsToChars2.put(new Point(1, 1), 'v');
+        buttonsToChars2.put(new Point(1, 2), '>');
+        Keypad directionalKeypad1 = new Keypad(buttonsToChars2, invertMap(buttonsToChars2), new Point(0, 2));
+        Keypad directionalKeypad2 = new Keypad(buttonsToChars2, invertMap(buttonsToChars2), new Point(0, 2));
+        Keypad directionalKeypad3 = new Keypad(buttonsToChars2, invertMap(buttonsToChars2), new Point(0, 2));
         keypads.add(directionalKeypad1);
         keypads.add(directionalKeypad2);
         keypads.add(directionalKeypad3);
-        directionalKeypad1.printButtons();
     }
 
     public static void run() {
         setup();
+        String s = "029A";
+        char[] charArray = s.toCharArray();
+        List<Character> result = new ArrayList<>();
+        for (char c : charArray) {
+            result.addAll(keypads.get(0).findShortestPath(c));
+        }
+        System.out.println(result);
     }
 }
