@@ -3,14 +3,8 @@ package day21;
 import java.util.*;
 
 public class Day21Part1b {
-
-    // +---+---+---+
-    // |***| ^ | A |
-    // +---+---+---+
-    // | < | v | > |
-    // +---+---+---+
-
     public static Map<String, List<Character>> myMap = new HashMap<>();
+    public static int directionalKeypadsCount = 3;
 
     static {
         myMap.put("A-^", new ArrayList<>(List.of('<')));
@@ -68,7 +62,7 @@ public class Day21Part1b {
 
         int depth = 0;
 
-        while (depth <= 2) {
+        while (depth < directionalKeypadsCount) {
             char current = 'A';
             List<Character> result = new ArrayList<>();
             for (char c : charList) {
@@ -81,7 +75,6 @@ public class Day21Part1b {
             }
             depth++;
             charList = result;
-            System.out.println();
         }
 
         return charList;
@@ -94,20 +87,6 @@ public class Day21Part1b {
     }
 
     public static void run() {
-        // List<String> words = new ArrayList<>(
-        // Arrays.asList("<A^A>^^AvvvA", "^^^A<AvvvA>A", "^<<A^^A>>AvvvA",
-        // "^A<<^^A>>AvvvA", "^^<<A>A>AvvA"));
-
-        // List<Integer> numbers = new ArrayList<>(Arrays.asList(29, 980, 179, 456,
-        // 379));
-
-        // List<String> words = new ArrayList<>(
-        // Arrays.asList("^<<A>A^^>AvvvA", "^<<A^^A>>vAvvA", "^^^A<AvAvv>A",
-        // "^<<A^^A>vvvA>A", "^^<AvA^^A>vvvA"));
-
-        // List<Integer> numbers = new ArrayList<>(Arrays.asList(129, 176, 985, 170,
-        // 528));
-
         // List<String> words = new ArrayList<>(Arrays.asList("029A", "980A", "179A",
         // "456A", "379A"));
 
@@ -119,17 +98,9 @@ public class Day21Part1b {
         for (int i = 0; i < words.size(); i++) {
             String word = words.get(i);
             List<Character> result = wordResult(word);
-            System.out.println(result);
-            System.out.println(word + " = " + result.size());
             sum += result.size() * findNumericPart(word);
         }
 
         System.out.println(sum);
     }
 }
-
-// 141708 too high
-// 145896
-// 139596
-// 137484
-// 136780
