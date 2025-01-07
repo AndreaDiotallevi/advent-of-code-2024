@@ -16,6 +16,18 @@ public class Day21Part1 {
             new Point(1, 0), '>',
             new Point(0, -1), '^',
             new Point(-1, 0), '<');
+    public static Map<Character, Integer> priorityMap1 = Map.of(
+            '>', 0,
+            '<', 0,
+            '^', 1,
+            'v', 1,
+            'A', 2);
+    public static Map<Character, Integer> priorityMap2 = Map.of(
+            '>', 1,
+            '<', 1,
+            '^', 0,
+            'v', 0,
+            'A', 2);
 
     public static class State implements Comparable<State> {
         int steps;
@@ -57,7 +69,8 @@ public class Day21Part1 {
                 State current = queue.poll();
                 if (buttonsToChars.get(current.point) == end) {
                     this.current = charsToButtons.get(end);
-                    return backtrackDirections(current);
+                    List<Character> path = backtrackDirections(current);
+                    return path;
                 }
                 if (visited.contains(current.point)) {
                     continue;
@@ -84,6 +97,32 @@ public class Day21Part1 {
             }
             Collections.reverse(path);
             path.add('A');
+            return path;
+        }
+
+        public List<Character> orderBest1(List<Character> path) {
+            Comparator<Character> customComparator = (c1, c2) -> {
+                int priority1 = priorityMap1.get(c1);
+                int priority2 = priorityMap1.get(c2);
+
+                return Integer.compare(priority1, priority2);
+            };
+
+            Collections.sort(path, customComparator);
+
+            return path;
+        }
+
+        public List<Character> orderBest2(List<Character> path) {
+            Comparator<Character> customComparator = (c1, c2) -> {
+                int priority1 = priorityMap2.get(c1);
+                int priority2 = priorityMap2.get(c2);
+
+                return Integer.compare(priority1, priority2);
+            };
+
+            Collections.sort(path, customComparator);
+
             return path;
         }
 
@@ -147,7 +186,13 @@ public class Day21Part1 {
         while (depth <= 2) {
             List<Character> result = new ArrayList<>();
             for (char c : charList) {
-                result.addAll(keypads.get(depth).findShortestPath(c));
+                List<Character> path = keypads.get(depth).findShortestPath(c);
+                if (depth > 0) {
+                    keypads.get(depth).orderBest1(path);
+                } else {
+                    keypads.get(depth).orderBest2(path);
+                }
+                result.addAll(path);
             }
             depth++;
             charList = result;
@@ -168,14 +213,14 @@ public class Day21Part1 {
         setup();
         // List<String> words = new ArrayList<>(Arrays.asList("129A", "176A", "985A",
         // "170A", "528A"));
-        // List<String> words = new ArrayList<>(Arrays.asList("029A", "980A", "179A",
-        // "456A", "379A"));
-        List<String> words = new ArrayList<>(Arrays.asList("379A"));
+        List<String> words = new ArrayList<>(Arrays.asList("029A", "980A", "179A",
+                "456A", "379A"));
+        // List<String> words = new ArrayList<>(Arrays.asList("456A"));
         long sum = 0;
 
         for (String word : words) {
             List<Character> result = wordResult(word);
-            System.out.println(result.size());
+            System.out.println(word + " = " + result.size());
             // System.out.println(findNumericPart(word));
             sum += result.size() * findNumericPart(word);
         }
