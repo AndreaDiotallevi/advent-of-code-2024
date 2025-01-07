@@ -46,6 +46,16 @@ public class Day21Part1b {
         myMap.put("6-A", new ArrayList<>(List.of('v', 'v')));
         myMap.put("A-3", new ArrayList<>(List.of('^')));
         myMap.put("3-7", new ArrayList<>(List.of('<', '<', '^', '^')));
+        myMap.put("1-2", new ArrayList<>(List.of('>')));
+        myMap.put("7-6", new ArrayList<>(List.of('v', '>', '>')));
+        myMap.put("8-5", new ArrayList<>(List.of('v')));
+        myMap.put("5-A", new ArrayList<>(List.of('v', 'v', '>')));
+        myMap.put("7-0", new ArrayList<>(List.of('>', 'v', 'v', 'v')));
+        myMap.put("0-A", new ArrayList<>(List.of('>')));
+        myMap.put("A-5", new ArrayList<>(List.of('<', '^', '^')));
+        myMap.put("5-2", new ArrayList<>(List.of('v')));
+        myMap.put("2-8", new ArrayList<>(List.of('^', '^')));
+        myMap.put("8-A", new ArrayList<>(List.of('v', 'v', 'v', '>')));
     }
 
     public static List<Character> wordResult(String s) {
@@ -98,8 +108,11 @@ public class Day21Part1b {
         // List<Integer> numbers = new ArrayList<>(Arrays.asList(129, 176, 985, 170,
         // 528));
 
-        List<String> words = new ArrayList<>(Arrays.asList("029A", "980A", "179A",
-                "456A", "379A"));
+        // List<String> words = new ArrayList<>(Arrays.asList("029A", "980A", "179A",
+        // "456A", "379A"));
+
+        List<String> words = new ArrayList<>(Arrays.asList("129A", "176A", "985A",
+                "170A", "528A"));
 
         long sum = 0;
 
@@ -117,3 +130,6 @@ public class Day21Part1b {
 
 // 141708 too high
 // 145896
+// 139596
+// 137484
+// 136780
