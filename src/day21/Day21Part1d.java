@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Day21Part1d {
     public static Map<String, List<Character>> shortestDirections = new HashMap<>();
-    public static int directionalKeypadsCount = 23;
+    public static int directionalKeypadsCount = 26;
     public static List<Character> currentPositions = new ArrayList<>();
 
     static {
@@ -59,13 +59,8 @@ public class Day21Part1d {
 
     public static long findScore(List<Character> myList, int depth) {
         if (depth == directionalKeypadsCount) {
-            // result.addAll(myList);
             return myList.size();
         }
-
-        // if (depth == 1) {
-        // result1.addAll(myList);
-        // }
 
         long score = 0;
 
@@ -84,41 +79,6 @@ public class Day21Part1d {
         return score;
     }
 
-    public static List<Character> wordResult(String s) {
-        char[] charArray = s.toCharArray();
-
-        List<Character> charList = new ArrayList<>();
-        for (char c : charArray) {
-            charList.add(c);
-        }
-
-        int keypadIndex = 0;
-
-        while (keypadIndex < directionalKeypadsCount) {
-            if (keypadIndex > 5)
-                return new ArrayList<>();
-            System.out.println(keypadIndex);
-            char current = 'A';
-            List<Character> result = new ArrayList<>();
-            for (char c : charList) {
-                if (current != c) {
-                    List<Character> path = shortestDirections.get(current + "-" + c);
-                    result.addAll(path);
-                }
-                result.add('A');
-                current = c;
-            }
-            keypadIndex++;
-            charList = result;
-            System.out.println(result);
-            System.out.println(result.size());
-            System.out.println("v=" + Collections.frequency(result, 'v'));
-            System.out.println(">=" + Collections.frequency(result, '>'));
-        }
-
-        return charList;
-    }
-
     public static long findNumericPart(String s) {
         String numericPart = s.replaceAll("[^0-9]", "");
         int number = Integer.parseInt(numericPart);
@@ -126,12 +86,13 @@ public class Day21Part1d {
     }
 
     public static void run() {
-        List<String> words = new ArrayList<>(Arrays.asList("029A"));
+        // List<String> words = new ArrayList<>(Arrays.asList("029A"));
+
         // List<String> words = new ArrayList<>(Arrays.asList("029A", "980A", "179A",
         // "456A", "379A"));
 
-        // List<String> words = new ArrayList<>(Arrays.asList("129A", "176A", "985A",
-        // "170A", "528A"));
+        List<String> words = new ArrayList<>(Arrays.asList("129A", "176A", "985A",
+                "170A", "528A"));
 
         long sum = 0;
 
@@ -150,8 +111,6 @@ public class Day21Part1d {
             sum += score * findNumericPart(word);
         }
 
-        // System.out.println(result1);
-        // System.out.println(result);
         System.out.println(sum);
     }
 }
@@ -161,7 +120,7 @@ public class Day21Part1d {
 // 20 386537098
 // 21 967575274
 // 22 2422025434
-// 23
-// 24
-// 25
+// 23 6062788684
+// 24 15176313262 - exec time 535211 ms -> 9 mins
+// 25 37989192818 - exec time 3357561 ms -> 56 mins
 // 26 ?
