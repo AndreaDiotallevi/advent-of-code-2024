@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Day21Part1d {
     public static Map<String, List<Character>> shortestDirections = new HashMap<>();
-    public static int directionalKeypadsCount = 19;
+    public static int directionalKeypadsCount = 23;
     public static List<Character> currentPositions = new ArrayList<>();
 
     static {
@@ -158,3 +158,10 @@ public class Day21Part1d {
 
 // 18 61688450
 // 19 154417672
+// 20 386537098
+// 21 967575274
+// 22 2422025434
+// 23
+// 24
+// 25
+// 26 ?

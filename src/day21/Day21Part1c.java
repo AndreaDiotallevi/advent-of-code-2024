@@ -63,8 +63,8 @@ public class Day21Part1c {
         int keypadIndex = 0;
 
         while (keypadIndex < directionalKeypadsCount) {
-            if (keypadIndex > 5)
-                return new ArrayList<>();
+            // if (keypadIndex > 5)
+            // return new ArrayList<>();
             System.out.println(keypadIndex);
             char current = 'A';
             List<Character> result = new ArrayList<>();
@@ -78,10 +78,10 @@ public class Day21Part1c {
             }
             keypadIndex++;
             charList = result;
-            System.out.println(result);
+            // System.out.println(result);
             System.out.println(result.size());
-            System.out.println("v=" + Collections.frequency(result, 'v'));
-            System.out.println(">=" + Collections.frequency(result, '>'));
+            // System.out.println("v=" + Collections.frequency(result, 'v'));
+            // System.out.println(">=" + Collections.frequency(result, '>'));
         }
 
         return charList;
@@ -113,3 +113,54 @@ public class Day21Part1c {
         System.out.println(sum);
     }
 }
+
+/*
+ * 0
+ * 12
+ * 1
+ * 28
+ * 2
+ * 68
+ * 3
+ * 168
+ * 4
+ * 414
+ * 5
+ * 1026
+ * 6
+ * 2556
+ * 7
+ * 6394
+ * 8
+ * 15988
+ * 9
+ * 40028
+ * 10
+ * 100170
+ * 11
+ * 250764
+ * 12
+ * 627668
+ * 13
+ * 1571208
+ * 14
+ * 3932968
+ * 
+ * 15
+ * 9845034
+ * 
+ * 16
+ * 24643876
+ * 
+ * 17
+ * 61688450
+ * 
+ * 18
+ * 154417672
+ * 
+ * 19
+ * 386537098
+ * 
+ * 20
+ * 967575274
+ */
