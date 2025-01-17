@@ -124,3 +124,13 @@ public class Day21Part1d {
 // 24 15176313262 - exec time 535211 ms -> 9 mins
 // 25 37989192818 - exec time 3357561 ms -> 56 mins
 // 26 ?
+
+/*
+ * 26
+ * score=104867972082
+ * score=101779364542
+ * score=91715319286
+ * score=99333974670
+ * score=98217357616
+ * 190526266569828 too high
+ */
